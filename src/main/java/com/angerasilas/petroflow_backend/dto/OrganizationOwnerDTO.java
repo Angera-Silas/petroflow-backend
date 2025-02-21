@@ -1,0 +1,17 @@
+package com.angerasilas.petroflow_backend.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrganizationOwnerDTO {
+    private String userId;
+    private String organizationId;
+}
