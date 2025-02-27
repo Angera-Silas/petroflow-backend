@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.EmployeesDTO;
+import com.angerasilas.petroflow_backend.dto.UserInfoDto;
+import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
 import com.angerasilas.petroflow_backend.entity.Employees;
 import com.angerasilas.petroflow_backend.entity.User;
 import com.angerasilas.petroflow_backend.exception.ResourceNotFoundException;
@@ -33,15 +37,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeesDTO createEmployee(EmployeesDTO employeesDTO) {
         User user = userRepository.findById(employeesDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
 
-        Employees employees = EmployeeMapper.mapToEmployees(employeesDTO,user);
+        Employees employees = EmployeeMapper.mapToEmployees(employeesDTO, user);
         return EmployeeMapper.mapToEmployeesDTO(employeesRepository.save(employees));
     }
 
     @Override
     public EmployeesDTO updateEmployee(Long employeeId, EmployeesDTO employeesDTO) {
         Employees employee = employeesRepository.findById(employeeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeesDTO));
-        ;
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeesDTO.getId()));
 
         employee.setAccountNo(employeesDTO.getAccountNo());
         employee.setEmploymentType(employeesDTO.getEmploymentType());
@@ -76,10 +79,30 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .orElseThrow(() -> new RuntimeException("User not found"));
             return EmployeeMapper.mapToEmployees(employeesDTO, user);
         }).collect(Collectors.toList());
-    
+
         List<Employees> savedEmployees = employeesRepository.saveAll(employees);
-    
+
         return savedEmployees.stream().map(EmployeeMapper::mapToEmployeesDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EmployeesDTO> updateEmployees(List<EmployeesDTO> employeesDTOs) {
+        List<Employees> employees = employeesDTOs.stream().map(employeesDTO -> {
+            Employees employee = employeesRepository.findById(employeesDTO.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeesDTO.getId()));
+
+            employee.setAccountNo(employeesDTO.getAccountNo());
+            employee.setEmploymentType(employeesDTO.getEmploymentType());
+            employee.setJobTitle(employeesDTO.getJobTitle());
+            employee.setSalary(employeesDTO.getSalary());
+            employee.setBankName(employeesDTO.getBankName());
+
+            return employee;
+        }).collect(Collectors.toList());
+
+        List<Employees> updatedEmployees = employeesRepository.saveAll(employees);
+
+        return updatedEmployees.stream().map(EmployeeMapper::mapToEmployeesDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -98,4 +121,24 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeesRepository.findEmployeesWithOrganization();
     }
 
+    @Override
+    public UserInfoDto getUserInfo(Long userId) {
+        return employeesRepository.findUserInfoByUserId(userId);
+    }
+
+    @Override
+    public void deleteEmployees(List<Long> ids) {
+        employeesRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public List<UserInfoDto> getUsersInfo() {
+        return employeesRepository.findUsersInfo();
+    }
+
+    @Override
+    public Page<UserPermissionsDto> getUsersPermissions(Pageable pageable) {
+        // Implement the method to retrieve all user permissions with pagination
+        return employeesRepository.findUsersPermissions(pageable);
+    }
 }

@@ -34,4 +34,7 @@ public interface UserDetailsService {
     // add multiple user details
     List<UserDetailsDto> saveAllUserDetails(List<UserDetailsDto> userDetailsDto);
 
+    //update users
+    List<UserDetailsDto> updateUsers(List<UserDetailsDto> userDetailsDtos);
+
 }

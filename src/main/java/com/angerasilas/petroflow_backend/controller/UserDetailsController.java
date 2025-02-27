@@ -77,4 +77,14 @@ public class UserDetailsController {
         List<UserDetailsDto> savedUserDetails = userDetailsService.saveAllUserDetails(userDetailsDto);
         return new ResponseEntity<>(savedUserDetails, HttpStatus.CREATED);
     }
+
+    // /api/profiles/update/all
+    @PutMapping("/update/all")
+    public ResponseEntity<List<UserDetailsDto>> updateUsers(@RequestBody List<UserDetailsDto> userDetailsDtos) {
+        List<UserDetailsDto> updatedUsers = userDetailsService.updateUsers(userDetailsDtos);
+        return new ResponseEntity<>(updatedUsers, HttpStatus.OK);
+    }
+
+    
+    
 }

@@ -35,6 +35,7 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Employees employees;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserDetails> userDetails;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserDetails userDetails;
+
 }

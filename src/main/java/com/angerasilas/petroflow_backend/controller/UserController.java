@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.angerasilas.petroflow_backend.dto.JwtResponse;
 import com.angerasilas.petroflow_backend.dto.LoginRequest;
+import com.angerasilas.petroflow_backend.dto.PasswordVerificationRequest;
 import com.angerasilas.petroflow_backend.dto.ResetPassword;
 import com.angerasilas.petroflow_backend.dto.UpdatePasswordDTO;
 import com.angerasilas.petroflow_backend.dto.UserDto;
@@ -57,6 +58,15 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    //delete users by username
+
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<Void> deleteAllUsers(@RequestBody List<String> usernames) {
+        userService.deleteAll(usernames);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     // get User
     @GetMapping("/get/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
@@ -90,12 +100,12 @@ public class UserController {
             return ResponseEntity.ok(jwtResponse);
         } catch (IllegalArgumentException e) {
             // Handle invalid username/password or other argument errors
-            System.out.println("Invalid username or password: \n"+ e);
+            System.out.println("Invalid username or password: \n" + e);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse("Invalid username or password"));
         } catch (Exception e) {
             // Handle general exceptions
-            System.out.println("An unexpected error occurred: \n"+ e);
+            System.out.println("An unexpected error occurred: \n" + e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("An unexpected error occurred"));
         }
@@ -141,9 +151,18 @@ public class UserController {
         }
     }
 
-    // get all Users by Organization
+    // update users
+    @PutMapping("/update/all")
+    public ResponseEntity<List<UserDto>> updateUsers(@RequestBody List<UserDto> userDtos) {
+        List<UserDto> updatedUsers = userService.updateUsers(userDtos);
 
-    // get all Users by Role
+        return new ResponseEntity<>(updatedUsers, HttpStatus.OK);
+    }
 
-    // get all Users by Organization and Role
+    @PostMapping("/verify-password")
+    public ResponseEntity<Boolean> verifyPassword(@RequestBody PasswordVerificationRequest request) {
+        boolean isPasswordValid = userService.verifyUserPassword(request.getUsername(), request.getPassword());
+        return ResponseEntity.ok(isPasswordValid);
+    }
+
 }

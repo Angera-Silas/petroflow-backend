@@ -51,7 +51,7 @@ public class UserDetails {
     @Column(nullable = false)
     private String registrationDate;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 }

@@ -122,4 +122,30 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return UserDetailsMapper.mapToUserDetailsDto(updatedUserDetails);
     }
+
+    @Override
+    public List<UserDetailsDto> updateUsers(List<UserDetailsDto> userDetailsDtos) {
+        List<UserDetails> userDetails = userDetailsDtos.stream().map(userDetailsDto -> {
+            UserDetails userDetail = userDetailsRepository.findById(userDetailsDto.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userDetailsDto.getId()));
+            
+            userDetail.setFirstname(userDetailsDto.getFirstname());
+            userDetail.setMiddlename(userDetailsDto.getMiddlename());
+            userDetail.setLastname(userDetailsDto.getLastname());
+            userDetail.setGender(userDetailsDto.getGender());
+            userDetail.setDateOfBirth(userDetailsDto.getDateOfBirth());
+            userDetail.setIdNumber(userDetailsDto.getIdNumber());
+            userDetail.setPhoneNumber(userDetailsDto.getPhoneNumber());
+            userDetail.setEmail(userDetailsDto.getEmail());
+            userDetail.setPhysicalAddress(userDetailsDto.getPhysicalAddress());
+            userDetail.setPostalCode(userDetailsDto.getPostalCode());
+            userDetail.setCity(userDetailsDto.getCity());
+            
+            return userDetail;
+        }).collect(Collectors.toList());
+    
+        List<UserDetails> updatedUserDetails = userDetailsRepository.saveAll(userDetails);
+    
+        return updatedUserDetails.stream().map(UserDetailsMapper::mapToUserDetailsDto).collect(Collectors.toList());
+    }
 }

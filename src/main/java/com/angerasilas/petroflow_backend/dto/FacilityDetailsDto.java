@@ -16,6 +16,7 @@ public class FacilityDetailsDto {
     private String postalCode;
     private String phone;
     private String email;
+    private String orgName;
     private String servicesOffered;
     private Long employeeCount;
 }

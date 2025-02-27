@@ -23,11 +23,12 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
     List<FacilityDto> findFacilitiesByOrganizationId(@Param("organizationId") Long organizationId);
 
     @Query("SELECT new com.angerasilas.petroflow_backend.dto.FacilityDetailsDto( " +
-           "f.name, f.county, f.town, f.street, f.physicalAddress, f.postalCode, f.phone, f.email, f.servicesOffered, " +
-           "COUNT(DISTINCT oemp.employee.id)) " +
-           "FROM Facility f " +
-           "LEFT JOIN f.organizationFacilities ofac " +
-           "LEFT JOIN f.organizationEmployees oemp " +
-           "GROUP BY f.id")
-    List<FacilityDetailsDto> getAllFacilitiesWithCounts();
+    "f.name, f.county, f.town, f.street, f.physicalAddress, f.postalCode, f.phone, f.email, o.name, f.servicesOffered, " +
+    "COUNT(DISTINCT oemp.employee.id)) " +
+    "FROM Facility f " +
+    "LEFT JOIN f.organizationFacilities ofac " +
+    "LEFT JOIN f.organizationEmployees oemp " +
+    "JOIN ofac.organization o " +
+    "GROUP BY f.id, f.name, f.county, f.town, f.street, f.physicalAddress, f.postalCode, f.phone, f.email, o.name, f.servicesOffered")
+List<FacilityDetailsDto> getAllFacilitiesWithCounts();
 }

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.angerasilas.petroflow_backend.dto.JwtResponse;
+import com.angerasilas.petroflow_backend.dto.PasswordDto;
 import com.angerasilas.petroflow_backend.dto.ResetPassword;
 import com.angerasilas.petroflow_backend.dto.UpdatePasswordDTO;
 import com.angerasilas.petroflow_backend.dto.UserDto;
@@ -150,6 +151,47 @@ public class UserServiceImpl implements UserService {
             return true; // Password updated successfully
         }
         return false; // User not found
+    }
+
+    @Override
+    public List<UserDto> updateUsers(List<UserDto> userDtos) {
+        List<User> users = userDtos.stream().map(userDto -> {
+            User user = userRepository.findById(userDto.getId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userDto.getId()));
+
+            user.setPassword(userDto.getPassword());
+            user.setUsername(userDto.getUsername());
+            user.setRole(userDto.getRole());
+
+            return user;
+        }).collect(Collectors.toList());
+
+        List<User> updatedUsers = userRepository.saveAll(users);
+
+        return updatedUsers.stream().map(UserMapper::mapToUserDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public PasswordDto getUserPassword(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
+
+        return new PasswordDto(user.getPassword());
+    }
+
+    @Override
+    public boolean verifyUserPassword(String username, String inputPassword) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
+
+        return encoder.matches(inputPassword, user.getPassword());
+    }
+
+    @Override
+    public void deleteAll(List<String> usernames) {
+        List<User> users = userRepository.findByUsernameIn(usernames);
+
+        userRepository.deleteAll(users);
     }
 
 }
