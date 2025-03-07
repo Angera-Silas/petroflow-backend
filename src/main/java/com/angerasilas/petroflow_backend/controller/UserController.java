@@ -1,6 +1,7 @@
 package com.angerasilas.petroflow_backend.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,7 @@ import com.angerasilas.petroflow_backend.dto.PasswordVerificationRequest;
 import com.angerasilas.petroflow_backend.dto.ResetPassword;
 import com.angerasilas.petroflow_backend.dto.UpdatePasswordDTO;
 import com.angerasilas.petroflow_backend.dto.UserDto;
+import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
 import com.angerasilas.petroflow_backend.exception.ErrorResponse;
 import com.angerasilas.petroflow_backend.service.UserService;
 
@@ -58,7 +60,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    //delete users by username
+    // delete users by username
 
     @DeleteMapping("/delete/all")
     public ResponseEntity<Void> deleteAllUsers(@RequestBody List<String> usernames) {
@@ -164,5 +166,20 @@ public class UserController {
         boolean isPasswordValid = userService.verifyUserPassword(request.getUsername(), request.getPassword());
         return ResponseEntity.ok(isPasswordValid);
     }
+
+    @GetMapping("/permissions")
+    public ResponseEntity<List<UserPermissionsDto>> getAllUserPermissions() {
+        List<UserPermissionsDto> userPermissions = userService.getAllUserPermissions();
+        return ResponseEntity.ok(userPermissions);
+    }
+
+
+    @GetMapping("/{userId}/permissions")
+    public ResponseEntity<UserPermissionsDto> getUserPermissions(@PathVariable("userId") Long userId) {
+        Optional<UserPermissionsDto> userPermissions = userService.getUserPermissionsByUserId(userId);
+        return userPermissions.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+    
 
 }

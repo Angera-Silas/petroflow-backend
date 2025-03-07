@@ -1,6 +1,8 @@
 package com.angerasilas.petroflow_backend.entity;
 
+import java.util.HashSet;
 import java.util.Set;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,9 +24,12 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Role role;
+    @Column(name = "role", nullable = false)
+    private String role; 
+
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private RoleEntity roleEntity;
 
     @Column(nullable = false)
     private boolean isActive;
@@ -38,4 +43,11 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserDetails userDetails;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "user_permissions",
+        joinColumns = @JoinColumn(name = "user_id"),
+        inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    private Set<PermissionEntity> permissions = new HashSet<>();
 }

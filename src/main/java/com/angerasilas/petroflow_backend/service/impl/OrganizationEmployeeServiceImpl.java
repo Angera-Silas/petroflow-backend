@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
@@ -28,10 +29,8 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
 
     @Override
     public OrganizationEmployeeDto addEmployeeToOrganization(OrganizationEmployeeDto organizationEmployeeDto) {
-        
         OrganizationEmployees organizationEmployee = organizationEmployeeMapper.toEntity(organizationEmployeeDto);
         OrganizationEmployees savedOrganizationEmployee = organizationEmployeesRepository.save(organizationEmployee);
-
         return organizationEmployeeMapper.toDTO(savedOrganizationEmployee);
     }
 
@@ -47,7 +46,6 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
         organizationEmployee.setTransferDate(organizationEmployeeDto.getTransferDate());
 
         OrganizationEmployees savedOrganizationEmployee = organizationEmployeesRepository.save(organizationEmployee);
-
         return organizationEmployeeMapper.toDTO(savedOrganizationEmployee);
     }
 
@@ -55,7 +53,6 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
     public OrganizationEmployeeDto getEmployeeFromOrganization(OrganizationEmployeeId organizationEmployeeId) {
         OrganizationEmployees organizationEmployee = organizationEmployeesRepository.findById(organizationEmployeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Organization Employee not found with id " + organizationEmployeeId));
-
         return organizationEmployeeMapper.toDTO(organizationEmployee);
     }
 
@@ -63,23 +60,36 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
     public void deleteEmployeeFromOrganization(OrganizationEmployeeId organizationEmployeeId) {
         OrganizationEmployees organizationEmployee = organizationEmployeesRepository.findById(organizationEmployeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Organization Employee not found with id " + organizationEmployeeId));
-
         organizationEmployeesRepository.delete(organizationEmployee);
     }
 
     @Override
     public List<OrganizationEmployeeDto> saveAllOrganizationEmployees(List<OrganizationEmployeeDto> organizationEmployeeDtos) {
-        List<OrganizationEmployees> organizationEmployees = organizationEmployeeDtos.stream().map(organizationEmployeeMapper::toEntity).collect(Collectors.toList());
-
+        List<OrganizationEmployees> organizationEmployees = organizationEmployeeDtos.stream()
+                .map(organizationEmployeeMapper::toEntity)
+                .collect(Collectors.toList());
         List<OrganizationEmployees> savedEmployees = organizationEmployeesRepository.saveAll(organizationEmployees);
-
         return savedEmployees.stream().map(organizationEmployeeMapper::toDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<OrganizationEmployeeDto> getAllOrganizationEmployees() {
         List<OrganizationEmployees> organizationEmployees = organizationEmployeesRepository.findAll();
-
         return organizationEmployees.stream().map(organizationEmployeeMapper::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndFacilityId(Long organizationId, Long facilityId) {
+        return organizationEmployeesRepository.findEmployeesByOrganizationIdAndFacilityId(organizationId, facilityId);
+    }
+
+    @Override
+    public List<EmployeeDetailsDto> getEmployeesWithOrganizationAndFacilityNames(Long organizationId) {
+        return organizationEmployeesRepository.findEmployeesWithOrganizationAndFacilityNames(organizationId);
+    }
+
+    @Override
+    public List<EmployeeDetailsDto> getEmployeesWithOrganization() {
+        return organizationEmployeesRepository.findEmployeesWithOrganization();
     }
 }

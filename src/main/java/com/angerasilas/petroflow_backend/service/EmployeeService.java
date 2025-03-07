@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.EmployeesDTO;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
 import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
@@ -19,9 +18,6 @@ public interface EmployeeService {
     EmployeesDTO updateEmployee(Long id, EmployeesDTO employeeDto);
     List<EmployeesDTO> createEmployees(List<EmployeesDTO> employeesDtos);
     List<EmployeesDTO> updateEmployees(List<EmployeesDTO> employeesDtos);
-    List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndFacilityId(Long organizationId, Long facilityId);
-    List<EmployeeDetailsDto> getEmployeesWithOrganizationAndFacilityNames(Long organizationId);
-    List<EmployeeDetailsDto> getEmployeesWithOrganization();
     UserInfoDto getUserInfo(Long userId);
     List<UserInfoDto> getUsersInfo();
     Page<UserPermissionsDto> getUsersPermissions(Pageable pageable);

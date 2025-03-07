@@ -1,12 +1,16 @@
 package com.angerasilas.petroflow_backend.service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import com.angerasilas.petroflow_backend.dto.JwtResponse;
 import com.angerasilas.petroflow_backend.dto.PasswordDto;
 import com.angerasilas.petroflow_backend.dto.ResetPassword;
 import com.angerasilas.petroflow_backend.dto.UpdatePasswordDTO;
 import com.angerasilas.petroflow_backend.dto.UserDto;
+import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
+import com.angerasilas.petroflow_backend.entity.PermissionEntity;
 
 public interface UserService {
     UserDto createUser(UserDto userDto);
@@ -39,4 +43,10 @@ public interface UserService {
 
     boolean verifyUserPassword(String username, String inputPassword);
 
+    Set<PermissionEntity> getCombinedPermissions(Long userId);
+
+    List<UserPermissionsDto> getAllUserPermissions();
+
+    Optional<UserPermissionsDto> getUserPermissionsByUserId(Long userId);
+    
 }

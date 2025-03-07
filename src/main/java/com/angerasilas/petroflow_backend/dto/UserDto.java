@@ -1,12 +1,9 @@
 package com.angerasilas.petroflow_backend.dto;
 
+import java.util.Set;
 
-import com.angerasilas.petroflow_backend.entity.Role;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
@@ -16,6 +13,7 @@ public class UserDto {
     private Long id;
     private String username;
     private String password;
-    private Role role;
+    private String role; // Role will be sent from frontend as a string
     private boolean isActive;
+    private Set<String> permissions;
 }

@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.EmployeesDTO;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
 import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
@@ -31,11 +29,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeesRepository employeesRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     public EmployeesDTO createEmployee(EmployeesDTO employeesDTO) {
-        User user = userRepository.findById(employeesDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findById(employeesDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         Employees employees = EmployeeMapper.mapToEmployees(employeesDTO, user);
         return EmployeeMapper.mapToEmployeesDTO(employeesRepository.save(employees));
@@ -106,22 +105,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndFacilityId(Long organizationId, Long facilityId) {
-        return employeesRepository.findEmployeesByOrganizationIdAndFacilityId(organizationId, facilityId);
-    }
-
-    @Override
-    public List<EmployeeDetailsDto> getEmployeesWithOrganizationAndFacilityNames(Long organizationId) {
-        return employeesRepository.findEmployeesWithOrganizationAndFacilityNames(organizationId);
-    }
-
-    @Override
-    public List<EmployeeDetailsDto> getEmployeesWithOrganization() {
-        return employeesRepository.findEmployeesWithOrganization();
-    }
-
-    @Override
     public UserInfoDto getUserInfo(Long userId) {
         return employeesRepository.findUserInfoByUserId(userId);
     }
@@ -138,7 +121,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Page<UserPermissionsDto> getUsersPermissions(Pageable pageable) {
-        // Implement the method to retrieve all user permissions with pagination
         return employeesRepository.findUsersPermissions(pageable);
     }
 }

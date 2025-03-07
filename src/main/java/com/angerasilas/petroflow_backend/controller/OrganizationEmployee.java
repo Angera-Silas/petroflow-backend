@@ -7,11 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
 import com.angerasilas.petroflow_backend.service.OrganizationEmployeeService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -62,5 +61,30 @@ public class OrganizationEmployee {
         return ResponseEntity.ok(organizationEmployees);
     }
 
+
+    // Get employees by organization and facility
+    @GetMapping("/details/get/{organizationId}/facility/{facilityId}")
+    public ResponseEntity<List<EmployeeDetailsDto>> getEmployeesByOrganizationIdAndFacilityId(
+            @PathVariable Long organizationId,
+            @PathVariable Long facilityId) {
+        List<EmployeeDetailsDto> employees = service.getEmployeesByOrganizationIdAndFacilityId(organizationId,
+                facilityId);
+        return ResponseEntity.ok(employees);
+    }
+
+    // Get employees with organization and facility names
+    @GetMapping("/details/get/{organizationId}")
+    public ResponseEntity<List<EmployeeDetailsDto>> getEmployeesWithOrganizationAndFacilityNames(
+            @PathVariable Long organizationId) {
+        List<EmployeeDetailsDto> employees = service
+                .getEmployeesWithOrganizationAndFacilityNames(organizationId);
+        return ResponseEntity.ok(employees);
+    }
+
+    @GetMapping("/details/get/all")
+    public ResponseEntity<List<EmployeeDetailsDto>> getAllEmployeesWithOrganization() {
+        List<EmployeeDetailsDto> employees = service.getEmployeesWithOrganization();
+        return ResponseEntity.ok(employees);
+    }
 
 }

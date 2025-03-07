@@ -1,7 +1,9 @@
 package com.angerasilas.petroflow_backend.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,9 +14,14 @@ import com.angerasilas.petroflow_backend.dto.PasswordDto;
 import com.angerasilas.petroflow_backend.dto.ResetPassword;
 import com.angerasilas.petroflow_backend.dto.UpdatePasswordDTO;
 import com.angerasilas.petroflow_backend.dto.UserDto;
+import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
+import com.angerasilas.petroflow_backend.entity.PermissionEntity;
+import com.angerasilas.petroflow_backend.entity.RoleEntity;
 import com.angerasilas.petroflow_backend.entity.User;
 import com.angerasilas.petroflow_backend.exception.ResourceNotFoundException;
 import com.angerasilas.petroflow_backend.mapper.UserMapper;
+import com.angerasilas.petroflow_backend.repository.PermissionRepository;
+import com.angerasilas.petroflow_backend.repository.RoleRepository;
 import com.angerasilas.petroflow_backend.repository.UserRepository;
 import com.angerasilas.petroflow_backend.security.JwtUtil;
 import com.angerasilas.petroflow_backend.service.UserService;
@@ -26,15 +33,22 @@ import lombok.AllArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+    private PermissionRepository permissionRepository;
+    private RoleRepository roleRepository;
     private final JwtUtil jwtUtil; // JWT utility
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); // Password encoder
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = UserMapper.mapToUser(userDto);
-
+        RoleEntity role = roleRepository.findByName(userDto.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDto.getRole()));
+    
+        Set<PermissionEntity> defaultPermissions = role.getPermissions();
+    
+        User user = UserMapper.mapToUser(userDto, role, defaultPermissions);
+    
         User savedUser = userRepository.save(user);
-
+    
         return UserMapper.mapToUserDto(savedUser);
     }
 
@@ -51,9 +65,22 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
 
-        user.setPassword(userDto.getPassword());
+        user.setPassword(encoder.encode(userDto.getPassword()));
         user.setUsername(userDto.getUsername());
-        user.setRole(userDto.getRole());
+
+        RoleEntity role = roleRepository.findByName(userDto.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDto.getRole()));
+
+        user.setRole(role.getName());
+        user.setRoleEntity(role);
+
+        Set<PermissionEntity> permissions = userDto.getPermissions().stream()
+                .map(permissionRepository::findByName)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+
+        user.setPermissions(permissions);
 
         User updatedUser = userRepository.save(user);
 
@@ -81,7 +108,6 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Invalid username or password");
         }
 
-        // Generate token
         String token = jwtUtil.generateToken(user.getUsername());
 
         return new JwtResponse(token, user.getRole());
@@ -89,7 +115,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDto> saveAllUsers(List<UserDto> userDto) {
-        List<User> users = userDto.stream().map(UserMapper::mapToUser).collect(Collectors.toList());
+        List<User> users = userDto.stream().map(userDtoItem -> {
+            Set<PermissionEntity> permissions = userDtoItem.getPermissions().stream()
+                    .map(permissionRepository::findByName)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet());
+
+            RoleEntity role = roleRepository.findByName(userDtoItem.getRole())
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDtoItem.getRole()));
+
+            return UserMapper.mapToUser(userDtoItem, role, permissions);
+        }).collect(Collectors.toList());
 
         List<User> savedUsers = userRepository.saveAll(users);
 
@@ -109,9 +146,22 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
 
-        user.setPassword(userDto.getPassword());
+        user.setPassword(encoder.encode(userDto.getPassword()));
         user.setUsername(userDto.getUsername());
-        user.setRole(userDto.getRole());
+
+        RoleEntity role = roleRepository.findByName(userDto.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDto.getRole()));
+
+        user.setRole(role.getName());
+        user.setRoleEntity(role);
+
+        Set<PermissionEntity> permissions = userDto.getPermissions().stream()
+                .map(permissionRepository::findByName)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+
+        user.setPermissions(permissions);
 
         User updatedUser = userRepository.save(user);
 
@@ -125,17 +175,15 @@ public class UserServiceImpl implements UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            // Validate old password
             if (!encoder.matches(updatePasswordDTO.getOldPassword(), user.getPassword())) {
-                return false; // Old password is incorrect
+                return false;
             }
 
-            // Encrypt the new password and save it
             user.setPassword(encoder.encode(updatePasswordDTO.getNewPassword()));
             userRepository.save(user);
-            return true; // Password updated successfully
+            return true;
         }
-        return false; // User not found
+        return false;
     }
 
     @Override
@@ -145,12 +193,11 @@ public class UserServiceImpl implements UserService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            // Encrypt the new password and save it
             user.setPassword(encoder.encode(reset.getNewPassword()));
             userRepository.save(user);
-            return true; // Password updated successfully
+            return true;
         }
-        return false; // User not found
+        return false;
     }
 
     @Override
@@ -159,9 +206,22 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.findById(userDto.getId())
                     .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userDto.getId()));
 
-            user.setPassword(userDto.getPassword());
+            user.setPassword(encoder.encode(userDto.getPassword()));
             user.setUsername(userDto.getUsername());
-            user.setRole(userDto.getRole());
+
+            RoleEntity role = roleRepository.findByName(userDto.getRole())
+                    .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDto.getRole()));
+
+            user.setRole(role.getName());
+            user.setRoleEntity(role);
+
+            Set<PermissionEntity> permissions = userDto.getPermissions().stream()
+                    .map(permissionRepository::findByName)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .collect(Collectors.toSet());
+
+            user.setPermissions(permissions);
 
             return user;
         }).collect(Collectors.toList());
@@ -194,4 +254,27 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteAll(users);
     }
 
+    @Override
+    public Set<PermissionEntity> getCombinedPermissions(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
+
+        RoleEntity roleEntity = roleRepository.findByName(user.getRole())
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + user.getRole()));
+
+        Set<PermissionEntity> combinedPermissions = new HashSet<>(roleEntity.getPermissions());
+        combinedPermissions.addAll(user.getPermissions());
+
+        return combinedPermissions;
+    }
+
+    @Override
+    public List<UserPermissionsDto> getAllUserPermissions() {
+        return userRepository.findAllUserPermissions();
+    }
+
+    @Override
+    public Optional<UserPermissionsDto> getUserPermissionsByUserId(Long userId) {
+        return userRepository.findUserPermissionsByUserId(userId);
+    }
 }

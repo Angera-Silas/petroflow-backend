@@ -2,6 +2,7 @@ package com.angerasilas.petroflow_backend.service;
 
 import java.util.List;
 
+import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
 
@@ -18,4 +19,7 @@ public interface OrganizationEmployeeService {
     List<OrganizationEmployeeDto> saveAllOrganizationEmployees(List<OrganizationEmployeeDto> organizationEmployeeDtos );
 
     List<OrganizationEmployeeDto> getAllOrganizationEmployees();
+    List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndFacilityId(Long organizationId, Long facilityId);
+    List<EmployeeDetailsDto> getEmployeesWithOrganizationAndFacilityNames(Long organizationId);
+    List<EmployeeDetailsDto> getEmployeesWithOrganization();
 }

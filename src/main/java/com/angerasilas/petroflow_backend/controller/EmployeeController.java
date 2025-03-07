@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.EmployeesDTO;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
 import com.angerasilas.petroflow_backend.dto.UserPermissionsDto;
@@ -86,30 +85,7 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
-    // Get employees by organization and facility
-    @GetMapping("/details/get/{organizationId}/facility/{facilityId}")
-    public ResponseEntity<List<EmployeeDetailsDto>> getEmployeesByOrganizationIdAndFacilityId(
-            @PathVariable Long organizationId,
-            @PathVariable Long facilityId) {
-        List<EmployeeDetailsDto> employees = employeeService.getEmployeesByOrganizationIdAndFacilityId(organizationId,
-                facilityId);
-        return ResponseEntity.ok(employees);
-    }
-
-    // Get employees with organization and facility names
-    @GetMapping("/details/get/{organizationId}")
-    public ResponseEntity<List<EmployeeDetailsDto>> getEmployeesWithOrganizationAndFacilityNames(
-            @PathVariable Long organizationId) {
-        List<EmployeeDetailsDto> employees = employeeService
-                .getEmployeesWithOrganizationAndFacilityNames(organizationId);
-        return ResponseEntity.ok(employees);
-    }
-
-    @GetMapping("/details/get/all")
-    public ResponseEntity<List<EmployeeDetailsDto>> getAllEmployeesWithOrganization() {
-        List<EmployeeDetailsDto> employees = employeeService.getEmployeesWithOrganization();
-        return ResponseEntity.ok(employees);
-    }
+    
 
     @GetMapping("/info/{userId}")
     public ResponseEntity<UserInfoDto> getUserInfo(@PathVariable Long userId) {

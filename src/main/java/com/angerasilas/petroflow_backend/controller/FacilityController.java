@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.angerasilas.petroflow_backend.dto.FacilityDetailsDto;
 import com.angerasilas.petroflow_backend.dto.FacilityDto;
 import com.angerasilas.petroflow_backend.service.FacilityService;
-//import com.angerasilas.petroflow_backend.service.OrganizationFacilityService;
 
 import lombok.AllArgsConstructor;
 
