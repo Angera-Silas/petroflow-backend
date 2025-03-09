@@ -290,9 +290,17 @@ public class UserServiceImpl implements UserService {
         return new PageImpl<>(users, pageable, usersPage.getTotalElements());
     }
 
+    
     @Override
     public Optional<UserPermissionsDto> getUserPermissionsByUserId(Long userId) {
-        return userRepository.findUserPermissionsByUserId(userId);
+        Optional<UserPermissionsDto> userPermissionsDto = userRepository.findUserPermissionsByUserId(userId);
+
+        userPermissionsDto.ifPresent(user -> {
+            List<String> permissions = permissionRepository.findPermissionsByUserId(user.getUserId());
+            user.setPermissions(permissions);
+        });
+
+        return userPermissionsDto;
     }
 
 }
