@@ -30,4 +30,7 @@ public class PermissionEntity {
 
     @ManyToMany(mappedBy = "permissions")
     private Set<User> users;
+
+    @ManyToMany(mappedBy = "permissions")
+    private Set<RoleEntity> roles;
 }

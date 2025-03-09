@@ -57,7 +57,7 @@ public class DataInitializer {
                 for (String permissionName : permissionNames) {
                         PermissionEntity permission = permissionRepository.findByName(permissionName)
                                         .orElseGet(() -> permissionRepository
-                                                        .save(new PermissionEntity(null, permissionName, null)));
+                                                        .save(new PermissionEntity(null, permissionName, null,null)));
                         permissionMap.put(permissionName, permission);
                 }
                 // Define roles and assign default permissions

@@ -1,6 +1,7 @@
 package com.angerasilas.petroflow_backend.dto;
 
-import com.angerasilas.petroflow_backend.entity.PermissionEntity;
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +12,10 @@ import lombok.NoArgsConstructor;
 public class RolePermissionsDto {
     private Long roleId;
     private String roleName;
-    private PermissionEntity permission;
+    private List<String> permissions;
+
+    public RolePermissionsDto(Long roleId, String roleName) {
+        this.roleId = roleId;
+        this.roleName = roleName;
+    }
 }

@@ -6,6 +6,8 @@ import com.angerasilas.petroflow_backend.service.RoleService;
 
 import lombok.AllArgsConstructor;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,6 +57,11 @@ public class RoleController {
         Optional<RolePermissionsDto> rolePermissions = roleService.getRolePermissionsByRoleId(roleId);
         return rolePermissions.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("all/permissions")
+    public ResponseEntity<Page<RolePermissionsDto>> getRolesPermissions(Pageable pageable){
+        return ResponseEntity.ok(roleService.getRolePermissions(pageable));
     }
 
     

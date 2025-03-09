@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,6 +86,30 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Optional<RolePermissionsDto> getRolePermissionsByRoleId(Long roleId) {
-        return roleRepository.findRolePermissionsByRoleId(roleId);
+        Optional<RolePermissionsDto> rolePermissionsDto = roleRepository.findRolePermissionsByRoleId(roleId);
+
+        rolePermissionsDto.ifPresent(role -> {
+            List<String> permissions = permissionRepository.findPermissionsByRoleId(role.getRoleId());
+            role.setPermissions(permissions);
+        });
+
+        return rolePermissionsDto;
+    }
+
+    @Override
+    public Page<RolePermissionsDto> getRolePermissions(Pageable pageable) {
+        Page<RolePermissionsDto> rolePermissionsPage = roleRepository.findRolePermissions(pageable);
+
+        // Find each role's permissions
+        List<RolePermissionsDto> rolePermissions = rolePermissionsPage.getContent().stream()
+                .map(role -> {
+                    List<String> permissions = permissionRepository.findPermissionsByRoleId(role.getRoleId());
+                    role.setPermissions(permissions);
+                    return role;
+                })
+                .collect(Collectors.toList());
+
+        // Return a new PageImpl with the updated role permissions
+        return new PageImpl<>(rolePermissions, pageable, rolePermissionsPage.getTotalElements());
     }
 }
