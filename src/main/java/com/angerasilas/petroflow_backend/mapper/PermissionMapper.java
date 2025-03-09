@@ -14,7 +14,8 @@ public class PermissionMapper {
     public static PermissionEntity toEntity(PermissionDTO permissionDTO) {
         return new PermissionEntity(
             permissionDTO.getId(),
-            permissionDTO.getName()
+            permissionDTO.getName(),
+            null
         );
     }
 }

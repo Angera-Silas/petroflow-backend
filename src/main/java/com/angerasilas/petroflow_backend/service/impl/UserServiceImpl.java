@@ -6,6 +6,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,10 +37,13 @@ import lombok.AllArgsConstructor;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
+
+    @Autowired
     private PermissionRepository permissionRepository;
     private RoleRepository roleRepository;
     private final JwtUtil jwtUtil; // JWT utility
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(); // Password encoder
+
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -269,12 +276,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserPermissionsDto> getAllUserPermissions() {
-        return userRepository.findAllUserPermissions();
+    public Page<UserPermissionsDto> getAllUserPermissions(Pageable pageable) {
+        Page<UserPermissionsDto> usersPage = userRepository.findUsersWithoutPermissions(pageable);
+
+        // Convert Page to List to modify permissions
+        List<UserPermissionsDto> users = usersPage.getContent();
+
+        users.forEach(user -> {
+            List<String> permissions = permissionRepository.findPermissionsByUserId(user.getUserId());
+            user.setPermissions(permissions);
+        });
+
+        return new PageImpl<>(users, pageable, usersPage.getTotalElements());
     }
 
     @Override
     public Optional<UserPermissionsDto> getUserPermissionsByUserId(Long userId) {
         return userRepository.findUserPermissionsByUserId(userId);
     }
+
 }

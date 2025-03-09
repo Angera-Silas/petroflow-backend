@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import com.angerasilas.petroflow_backend.entity.User;
 import com.angerasilas.petroflow_backend.exception.ResourceNotFoundException;
 import com.angerasilas.petroflow_backend.mapper.EmployeeMapper;
 import com.angerasilas.petroflow_backend.repository.EmployeesRepository;
+import com.angerasilas.petroflow_backend.repository.PermissionRepository;
 import com.angerasilas.petroflow_backend.repository.UserRepository;
 import com.angerasilas.petroflow_backend.service.EmployeeService;
 
@@ -30,6 +32,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private final UserRepository userRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @Override
     public EmployeesDTO createEmployee(EmployeesDTO employeesDTO) {
@@ -88,7 +93,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeesDTO> updateEmployees(List<EmployeesDTO> employeesDTOs) {
         List<Employees> employees = employeesDTOs.stream().map(employeesDTO -> {
             Employees employee = employeesRepository.findById(employeesDTO.getId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id " + employeesDTO.getId()));
+                    .orElseThrow(
+                            () -> new ResourceNotFoundException("Employee not found with id " + employeesDTO.getId()));
 
             employee.setAccountNo(employeesDTO.getAccountNo());
             employee.setEmploymentType(employeesDTO.getEmploymentType());
@@ -121,6 +127,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Page<UserPermissionsDto> getUsersPermissions(Pageable pageable) {
-        return employeesRepository.findUsersPermissions(pageable);
+        Page<UserPermissionsDto> usersPage = employeesRepository.findUsersPermissions(pageable);
+
+        // Convert Page to List to modify permissions
+        List<UserPermissionsDto> users = usersPage.getContent();
+
+        users.forEach(user -> {
+            List<String> permissions = permissionRepository.findPermissionsByUserId(user.getUserId());
+            user.setPermissions(permissions);
+        });
+
+        return new PageImpl<>(users, pageable, usersPage.getTotalElements());
     }
 }

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.angerasilas.petroflow_backend.dto.JwtResponse;
 import com.angerasilas.petroflow_backend.dto.PasswordDto;
 import com.angerasilas.petroflow_backend.dto.ResetPassword;
@@ -45,7 +48,7 @@ public interface UserService {
 
     Set<PermissionEntity> getCombinedPermissions(Long userId);
 
-    List<UserPermissionsDto> getAllUserPermissions();
+    Page<UserPermissionsDto> getAllUserPermissions(Pageable Pageable);
 
     Optional<UserPermissionsDto> getUserPermissionsByUserId(Long userId);
     

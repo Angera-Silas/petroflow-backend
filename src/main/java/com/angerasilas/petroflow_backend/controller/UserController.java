@@ -6,6 +6,8 @@ import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -168,8 +170,8 @@ public class UserController {
     }
 
     @GetMapping("/permissions")
-    public ResponseEntity<List<UserPermissionsDto>> getAllUserPermissions() {
-        List<UserPermissionsDto> userPermissions = userService.getAllUserPermissions();
+    public ResponseEntity<Page<UserPermissionsDto>> getAllUserPermissions(Pageable pageable) {
+        Page<UserPermissionsDto> userPermissions = userService.getAllUserPermissions(pageable);
         return ResponseEntity.ok(userPermissions);
     }
 
