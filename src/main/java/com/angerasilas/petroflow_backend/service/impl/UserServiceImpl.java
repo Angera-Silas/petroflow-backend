@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.angerasilas.petroflow_backend.dto.JwtResponse;
 import com.angerasilas.petroflow_backend.dto.PasswordDto;
@@ -46,16 +47,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         RoleEntity role = roleRepository.findByName(userDto.getRole())
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDto.getRole()));
-    
-        Set<PermissionEntity> defaultPermissions = role.getPermissions();
-    
+
+        Set<PermissionEntity> defaultPermissions = new HashSet<>(role.getPermissions());
+
         User user = UserMapper.mapToUser(userDto, role, defaultPermissions);
-    
+
         User savedUser = userRepository.save(user);
-    
+
         return UserMapper.mapToUserDto(savedUser);
     }
 

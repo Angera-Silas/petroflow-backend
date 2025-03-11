@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
@@ -91,5 +92,25 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
     @Override
     public List<EmployeeDetailsDto> getEmployeesWithOrganization() {
         return organizationEmployeesRepository.findEmployeesWithOrganization();
+    }
+
+    @Override
+    public List<AvailableRolesDto> getDistinctRolesByOrganizationId(Long organizationId) {
+        return organizationEmployeesRepository.findDistinctRolesByOrganizationId(organizationId);
+    }
+
+    @Override
+    public List<AvailableRolesDto> getDistinctRolesByOrganizationIdAndFacilityId(Long organizationId, Long facilityId) {
+        return organizationEmployeesRepository.findDistinctRolesByOrganizationIdAndFacilityId(organizationId, facilityId);
+    }
+
+    @Override
+    public List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndRole(Long organizationId, String role) {
+        return organizationEmployeesRepository.findEmployeesByOrganizationIdAndRole(organizationId, role);
+    }
+
+    @Override
+    public List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndFacilityIdAndRole(Long organizationId, Long facilityId, String role) {
+        return organizationEmployeesRepository.findEmployeesByOrganizationIdAndFacilityIdAndRole(organizationId, facilityId, role);
     }
 }
