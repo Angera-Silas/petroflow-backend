@@ -38,6 +38,39 @@ public interface EmployeesRepository extends JpaRepository<Employees, Long> {
             "ud.firstname, ud.lastname, oe.department, e.jobTitle, " +
             "e.employmentType, ud.email, ud.phoneNumber, o.name, ud.city, " +
             "ud.postalCode, ud.physicalAddress, " +
+            "ud.dateOfBirth, e.hireDate, u.id ) " +
+            "FROM User u " +
+            "LEFT JOIN u.employees e " +
+            "LEFT JOIN OrganizationEmployees oe ON oe.employee = e " +
+            "LEFT JOIN u.userDetails ud " +
+            "LEFT JOIN oe.organization o " +
+            "LEFT JOIN oe.facility f " +
+            "WHERE o.id = :orgId")
+    List<UserInfoDto> findUserInfoByOrgId(@Param("orgId") Long orgId);
+
+    @Query("SELECT new com.angerasilas.petroflow_backend.dto.UserInfoDto( " +
+            "o.id, f.id, e.id, " +
+            "COALESCE(f.name, 'No Facility'), oe.employeeNo, " +
+            "ud.firstname, ud.lastname, oe.department, e.jobTitle, " +
+            "e.employmentType, ud.email, ud.phoneNumber, o.name, ud.city, " +
+            "ud.postalCode, ud.physicalAddress, " +
+            "ud.dateOfBirth, e.hireDate, u.id ) " +
+            "FROM User u " +
+            "LEFT JOIN u.employees e " +
+            "LEFT JOIN OrganizationEmployees oe ON oe.employee = e " +
+            "LEFT JOIN u.userDetails ud " +
+            "LEFT JOIN oe.organization o " +
+            "LEFT JOIN oe.facility f " +
+            "WHERE u.id = :fId")
+    List<UserInfoDto> findUserInfoByFacility(@Param("fId") Long fId);
+
+
+    @Query("SELECT new com.angerasilas.petroflow_backend.dto.UserInfoDto( " +
+            "o.id, f.id, e.id, " +
+            "COALESCE(f.name, 'No Facility'), oe.employeeNo, " +
+            "ud.firstname, ud.lastname, oe.department, e.jobTitle, " +
+            "e.employmentType, ud.email, ud.phoneNumber, o.name, ud.city, " +
+            "ud.postalCode, ud.physicalAddress, " +
             "ud.dateOfBirth, e.hireDate, u.id) " +
             "FROM User u " +
             "LEFT JOIN u.employees e " +

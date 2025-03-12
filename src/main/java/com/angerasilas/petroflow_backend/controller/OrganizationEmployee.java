@@ -5,11 +5,19 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
+import com.angerasilas.petroflow_backend.dto.UserInfoDto;
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
 import com.angerasilas.petroflow_backend.service.OrganizationEmployeeService;
 
@@ -88,31 +96,36 @@ public class OrganizationEmployee {
         return ResponseEntity.ok(employees);
     }
 
+    //get available roles 
 
-    @GetMapping("/organizations/{organizationId}/roles")
+    @GetMapping("/get/organization/{organizationId}/roles")
     public ResponseEntity<List<AvailableRolesDto>> getDistinctRolesByOrganizationId(@PathVariable Long organizationId) {
         List<AvailableRolesDto> roles = service.getDistinctRolesByOrganizationId(organizationId);
         return ResponseEntity.ok(roles);
     }
 
-    @GetMapping("/organizations/{organizationId}/facilities/{facilityId}/roles")
+    @GetMapping("/get/organization/{organizationId}/facility/{facilityId}/roles")
     public ResponseEntity<List<AvailableRolesDto>> getDistinctRolesByOrganizationIdAndFacilityId(
             @PathVariable Long organizationId, @PathVariable Long facilityId) {
         List<AvailableRolesDto> roles = service.getDistinctRolesByOrganizationIdAndFacilityId(organizationId, facilityId);
         return ResponseEntity.ok(roles);
     }
 
-    @GetMapping("/organizations/{organizationId}/employees")
-    public ResponseEntity<List<EmployeeDetailsDto>> getEmployeesByOrganizationIdAndRole(
-            @PathVariable Long organizationId, @RequestParam String role) {
-        List<EmployeeDetailsDto> employees = service.getEmployeesByOrganizationIdAndRole(organizationId, role);
+    //get users by role
+    
+    @GetMapping("/get/organization/{organizationId}/employees/{role}")
+    public ResponseEntity<List<UserInfoDto>> getEmployeesByOrganizationIdAndRole(
+            @PathVariable Long organizationId, @PathVariable String role) {
+        List<UserInfoDto> employees = service.getEmployeesByOrganizationIdAndRole(organizationId, role);
         return ResponseEntity.ok(employees);
+
     }
 
-    @GetMapping("/organizations/{organizationId}/facilities/{facilityId}/employees")
-    public ResponseEntity<List<EmployeeDetailsDto>> getEmployeesByOrganizationIdAndFacilityIdAndRole(
-            @PathVariable Long organizationId, @PathVariable Long facilityId, @RequestParam String role) {
-        List<EmployeeDetailsDto> employees = service.getEmployeesByOrganizationIdAndFacilityIdAndRole(organizationId, facilityId, role);
+    
+    @GetMapping("/get/organization/{organizationId}/facility/{facilityId}/employees/{role}")
+    public ResponseEntity<List<UserInfoDto>> getEmployeesByOrganizationIdAndFacilityIdAndRole(
+            @PathVariable Long organizationId, @PathVariable Long facilityId, @PathVariable String role) {
+        List<UserInfoDto> employees = service.getEmployeesByOrganizationIdAndFacilityIdAndRole(organizationId, facilityId, role);
         return ResponseEntity.ok(employees);
     }
 

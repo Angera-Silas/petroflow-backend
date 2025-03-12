@@ -77,4 +77,15 @@ public class Organization {
     @OneToMany(mappedBy = "organization")
     private Set<OrganizationEmployees> organizationEmployees;
 
+    @OneToMany(mappedBy = "organization")
+    private Set<Product> products;
+
+    @OneToMany(mappedBy = "organization")
+    private Set<Stock> stocks;
+
+    @OneToMany(mappedBy = "organization")
+    private Set<PumpMeterReading> pumpMeterReading;
+
+
+
 }

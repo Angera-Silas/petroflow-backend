@@ -139,4 +139,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return new PageImpl<>(users, pageable, usersPage.getTotalElements());
     }
+
+    @Override
+    public List<UserInfoDto> getUsersInfoByOrgId(Long orgId) {
+        return employeesRepository.findUserInfoByOrgId(orgId);
+    }
+
+    @Override
+    public List<UserInfoDto> getUsersInfoByFacilityId(Long facilityId) {
+        return employeesRepository.findUserInfoByFacility(facilityId);
+    }
 }

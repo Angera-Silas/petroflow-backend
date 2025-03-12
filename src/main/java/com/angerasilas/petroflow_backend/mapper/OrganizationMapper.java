@@ -43,6 +43,9 @@ public class OrganizationMapper {
             organizationDto.getOrgDescription(),
             null,
             null,
+            null,
+            null,
+            null,
             null
             );
     }

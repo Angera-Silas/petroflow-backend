@@ -61,5 +61,14 @@ public class Facility {
     @OneToMany(mappedBy = "facility")
     private Set<OrganizationEmployees> organizationEmployees;
 
+    @OneToMany(mappedBy = "facility")
+    private Set<Product> products;
+
+    @OneToMany(mappedBy = "facility")
+    private Set<Stock> stocks;
+
+    @OneToMany(mappedBy = "facility")
+    private Set<PumpMeterReading> pumpMeterReading;
+
 
 }

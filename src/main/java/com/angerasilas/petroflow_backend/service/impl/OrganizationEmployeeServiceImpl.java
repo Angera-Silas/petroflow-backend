@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
+import com.angerasilas.petroflow_backend.dto.UserInfoDto;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
 import com.angerasilas.petroflow_backend.exception.ResourceNotFoundException;
@@ -105,12 +106,12 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
     }
 
     @Override
-    public List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndRole(Long organizationId, String role) {
+    public List<UserInfoDto> getEmployeesByOrganizationIdAndRole(Long organizationId, String role) {
         return organizationEmployeesRepository.findEmployeesByOrganizationIdAndRole(organizationId, role);
     }
 
     @Override
-    public List<EmployeeDetailsDto> getEmployeesByOrganizationIdAndFacilityIdAndRole(Long organizationId, Long facilityId, String role) {
+    public List<UserInfoDto> getEmployeesByOrganizationIdAndFacilityIdAndRole(Long organizationId, Long facilityId, String role) {
         return organizationEmployeesRepository.findEmployeesByOrganizationIdAndFacilityIdAndRole(organizationId, facilityId, role);
     }
 }

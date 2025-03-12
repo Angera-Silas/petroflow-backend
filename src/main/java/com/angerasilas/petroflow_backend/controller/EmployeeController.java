@@ -104,4 +104,16 @@ public class EmployeeController {
         Page<UserPermissionsDto> usersPermissions = employeeService.getUsersPermissions(pageable);
         return ResponseEntity.ok(usersPermissions);
     }
+
+    @GetMapping("/info/org/{orgId}")
+    public ResponseEntity<List<UserInfoDto>> getUsersInfoByOrgId(@PathVariable Long orgId) {
+        List<UserInfoDto> usersInfo = employeeService.getUsersInfoByOrgId(orgId);
+        return ResponseEntity.ok(usersInfo);
+    }
+
+    @GetMapping("/info/facility/{facilityId}")
+    public ResponseEntity<List<UserInfoDto>> getUsersInfoByFacilityId(@PathVariable Long facilityId) {
+        List<UserInfoDto> usersInfo = employeeService.getUsersInfoByFacilityId(facilityId);
+        return ResponseEntity.ok(usersInfo);
+    }
 }

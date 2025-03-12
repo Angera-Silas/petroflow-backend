@@ -20,6 +20,8 @@ public interface EmployeeService {
     List<EmployeesDTO> updateEmployees(List<EmployeesDTO> employeesDtos);
     UserInfoDto getUserInfo(Long userId);
     List<UserInfoDto> getUsersInfo();
+    List<UserInfoDto> getUsersInfoByOrgId(Long orgId);
+    List<UserInfoDto> getUsersInfoByFacilityId(Long facilityId);
     Page<UserPermissionsDto> getUsersPermissions(Pageable pageable);
 
 }

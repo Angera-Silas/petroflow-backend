@@ -66,4 +66,6 @@ public class Employees {
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<OrganizationEmployees> organizationEmployees;
 
+    
+
 }

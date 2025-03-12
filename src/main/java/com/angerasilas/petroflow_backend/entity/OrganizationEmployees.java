@@ -1,5 +1,7 @@
 package com.angerasilas.petroflow_backend.entity;
 
+import java.util.Set;
+
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -54,4 +57,17 @@ public class OrganizationEmployees {
 
     @Column(nullable = true)
     private String transferDate;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Sales> sales;
+
+    @OneToMany(mappedBy = "organizationEmployees")
+    private Set<Incident> incidents;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Request> requests;
+
+    @OneToMany(mappedBy = "employee")
+    private Set<Shift> shifts;
+
 }
