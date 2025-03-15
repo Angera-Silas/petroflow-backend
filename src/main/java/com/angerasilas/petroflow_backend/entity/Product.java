@@ -1,8 +1,19 @@
 package com.angerasilas.petroflow_backend.entity;
 
-import lombok.*;
-import java.util.List;
-import jakarta.persistence.*;
+import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -31,11 +42,11 @@ public class Product {
     private String productSubCategory;
 
     @ManyToOne
-    @JoinColumn(name = "org_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "org_id", referencedColumnName = "id" , nullable = false)
     private Organization organization;
 
     @ManyToOne
-    @JoinColumn(name = "facility_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "facility_id", referencedColumnName = "id", nullable = false )
     private Facility facility;
 
 
@@ -43,8 +54,8 @@ public class Product {
     private String department;
 
     @OneToMany(mappedBy = "product")
-    private List<Stock> stocks;
+    private Set<Stock> stocks;
 
     @OneToMany(mappedBy = "product")
-    private List<Sales> sales;
+    private Set<Sales> sales;
 }

@@ -9,4 +9,6 @@ public interface SellPointService {
     void deleteSellPoint(Long id);
     SellPointDto getSellPointById(Long id);
     List<SellPointDto> getAllSellPoints();
+    SellPointDto getSellPointByName(String name);
+    List<SellPointDto> getSellPointsByFacilityId(Long facilityId);
 }

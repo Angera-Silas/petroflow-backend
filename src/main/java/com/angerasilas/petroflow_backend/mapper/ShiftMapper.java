@@ -1,46 +1,48 @@
 package com.angerasilas.petroflow_backend.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.angerasilas.petroflow_backend.dto.ShiftDto;
+import com.angerasilas.petroflow_backend.entity.Facility;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
 import com.angerasilas.petroflow_backend.entity.Shift;
-import org.springframework.stereotype.Component;
 
 @Component
 public class ShiftMapper {
 
-    public ShiftDto toDto(Shift shift) {
+    public static ShiftDto mapToShiftDto(Shift shift) {
         if (shift == null) {
             return null;
         }
 
-        ShiftDto dto = new ShiftDto();
-        dto.setId(shift.getId());
-        dto.setEmployeeNo(shift.getEmployee() != null ? shift.getEmployee().getEmployeeNo() : null);
-        dto.setStartDate(shift.getStartDate());
-        dto.setEndDate(shift.getEndDate());
-        dto.setType(shift.getType().name());
-
-        return dto;
+        return new ShiftDto(
+            shift.getId(),
+            shift.getFacility().getId(),
+            shift.getEmployee().getEmployeeNo(),
+            shift.getStartDate(),
+            shift.getEndDate(),
+            shift.getType().name()
+        );
     }
 
-    public Shift toEntity(ShiftDto dto) {
+    public static Shift mapToShift(ShiftDto dto, OrganizationEmployees employee, Facility facility) {
         if (dto == null) {
             return null;
         }
 
-        Shift entity = new Shift();
-        entity.setId(dto.getId());
-        entity.setStartDate(dto.getStartDate());
-        entity.setEndDate(dto.getEndDate());
-        entity.setType(Shift.ShiftType.valueOf(dto.getType()));
-
-        // Set relationships
-        if (dto.getEmployeeNo() != null) {
-            OrganizationEmployees employee = new OrganizationEmployees();
-            employee.setEmployeeNo(dto.getEmployeeNo());
-            entity.setEmployee(employee);
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee cannot be null");
         }
 
-        return entity;
+        return new Shift(
+            dto.getId(),
+            facility,
+            employee,
+            dto.getStartDate(),
+            dto.getEndDate(),
+            Shift.ShiftType.valueOf(dto.getType()),
+            null,
+            null
+        );
     }
 }

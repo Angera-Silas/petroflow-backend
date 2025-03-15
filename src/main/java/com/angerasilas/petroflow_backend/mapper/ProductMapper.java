@@ -1,43 +1,58 @@
 package com.angerasilas.petroflow_backend.mapper;
 
 import org.springframework.stereotype.Component;
+
 import com.angerasilas.petroflow_backend.dto.ProductDto;
+import com.angerasilas.petroflow_backend.entity.Facility;
+import com.angerasilas.petroflow_backend.entity.Organization;
 import com.angerasilas.petroflow_backend.entity.Product;
-import com.angerasilas.petroflow_backend.repository.OrganizationRepository;
-import com.angerasilas.petroflow_backend.repository.FacilityRepository;
-import lombok.RequiredArgsConstructor;
 
 @Component
-@RequiredArgsConstructor
 public class ProductMapper {
 
-    private final OrganizationRepository organizationRepository;
-    private final FacilityRepository facilityRepository;
+    public static ProductDto mapToProductDto(Product product) {
+        if (product == null) {
+            return null;
+        }
 
-
-    public ProductDto toDto(Product product) {
-        ProductDto dto = new ProductDto();
-        dto.setId(product.getId());
-        dto.setDateAdded(product.getDateAdded());
-        dto.setProductName(product.getProductName());
-        dto.setProductDescription(product.getProductDescription());
-        dto.setProductCategory(product.getProductCategory());
-        dto.setProductSubCategory(product.getProductSubCategory());
-        dto.setDepartment(product.getDepartment());
-        return dto;
+        return new ProductDto(
+            product.getId(),
+            product.getDateAdded(),
+            product.getProductName(),
+            product.getProductDescription(),
+            product.getProductCategory(),
+            product.getProductSubCategory(),
+            product.getOrganization() != null ? product.getOrganization().getId() : null,
+            product.getFacility() != null ? product.getFacility().getId() : null,
+            product.getDepartment()
+        );
     }
 
-    public Product toEntity(ProductDto productDto) {
-        Product entity = new Product();
-        entity.setId(productDto.getId());
-        entity.setDateAdded(productDto.getDateAdded());
-        entity.setProductName(productDto.getProductName());
-        entity.setProductDescription(productDto.getProductDescription());
-        entity.setProductCategory(productDto.getProductCategory());
-        entity.setProductSubCategory(productDto.getProductSubCategory());
-        entity.setDepartment(productDto.getDepartment());
-        entity.setOrganization(organizationRepository.findById(productDto.getOrgId()).orElse(null));
-        entity.setFacility(facilityRepository.findById(productDto.getFacilityId()).orElse(null));
-        return entity;
+    public static Product mapToProduct(ProductDto productDto, Organization organization, Facility facility) {
+        if (productDto == null) {
+            return null;
+        }
+
+        if (organization == null) {
+            throw new IllegalArgumentException("Organization cannot be null");
+        }
+
+        if (facility == null) {
+            throw new IllegalArgumentException("Facility cannot be null");
+        }
+
+        return new Product(
+            productDto.getId(),
+            productDto.getDateAdded(),
+            productDto.getProductName(),
+            productDto.getProductDescription(),
+            productDto.getProductCategory(),
+            productDto.getProductSubCategory(),
+            organization,
+            facility,
+            productDto.getDepartment(),
+            null,
+            null
+        );
     }
 }

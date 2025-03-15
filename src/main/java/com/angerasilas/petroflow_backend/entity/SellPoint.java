@@ -1,9 +1,10 @@
 package com.angerasilas.petroflow_backend.entity;
 
 import java.util.Set;
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
@@ -15,6 +16,10 @@ public class SellPoint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "facility_id", referencedColumnName = "id")
+    private Facility facility;
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;

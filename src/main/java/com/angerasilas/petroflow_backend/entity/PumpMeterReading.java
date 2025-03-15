@@ -17,11 +17,11 @@ public class PumpMeterReading {
 
 
     @ManyToOne
-    @JoinColumn(name = "org_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "org_id", referencedColumnName = "id" , nullable = false)
     private Organization organization;
 
     @ManyToOne
-    @JoinColumn(name = "facility_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "facility_id", referencedColumnName = "id", nullable = false )
     private Facility facility;
 
     @ManyToOne

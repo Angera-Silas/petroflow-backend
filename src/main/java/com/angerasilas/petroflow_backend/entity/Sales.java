@@ -25,12 +25,16 @@ public class Sales {
     private Product product;
     
     @ManyToOne
-    @JoinColumn(name = "employee_no", nullable = false, insertable = false, updatable = false, referencedColumnName="employeeNo")
+    @JoinColumn(name = "employee_no", nullable = false, referencedColumnName="employeeNo")
     private OrganizationEmployees employee;
 
     @ManyToOne
     @JoinColumn(name = "sell_point_id", nullable = false)
     private SellPoint sellPoint;
+
+    @ManyToOne
+    @JoinColumn(name = "shift_id", nullable = false)
+    private Shift shift;
 
     @Column(name = "units_sold")
     private String unitsSold;

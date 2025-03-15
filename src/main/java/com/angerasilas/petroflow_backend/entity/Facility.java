@@ -71,4 +71,11 @@ public class Facility {
     private Set<PumpMeterReading> pumpMeterReading;
 
 
+    @OneToMany(mappedBy = "facility")
+    private Set<SellPoint> sellPoints;
+
+    @OneToMany(mappedBy = "facility")
+    private Set<Shift> shifts;
+
+
 }

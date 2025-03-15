@@ -9,4 +9,10 @@ public interface ShiftService {
     void deleteShift(Long id);
     ShiftDto getShiftById(Long id);
     List<ShiftDto> getAllShifts();
+    List<ShiftDto> getShiftsByEmployeeNo(String employeeNo);
+    List<ShiftDto> getShiftsByFacilityId(Long facilityId);
+    List<ShiftDto> getShiftsByType(String type);
+    List<ShiftDto> getShiftsByEmployeeNoAndFacilityId(String employeeNo, Long facilityId);
+    List<ShiftDto> getShiftsByFacilityIdAndType(Long facilityId, String type);
+    List<ShiftDto> getShiftsByFacilityIdAndTypeAndEmployeeNo(Long facilityId, String type, String employeeNo);
 }

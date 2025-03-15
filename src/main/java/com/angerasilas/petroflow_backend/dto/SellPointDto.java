@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SellPointDto {
     private Long id;
+    private Long facilityId;
     private String name;
     private String description;
     private String type;

@@ -16,7 +16,7 @@ public class Notifications {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employees employee;
 
     @Column(name = "notification")

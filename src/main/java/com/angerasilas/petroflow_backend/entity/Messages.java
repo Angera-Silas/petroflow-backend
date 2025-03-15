@@ -16,11 +16,11 @@ public class Messages {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "sender_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "sender_id", referencedColumnName = "id")
     private Employees sender;
 
     @ManyToOne
-    @JoinColumn(name = "receiver_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "receiver_id", referencedColumnName = "id")
     private Employees receiver;
 
     @Column(name = "message")

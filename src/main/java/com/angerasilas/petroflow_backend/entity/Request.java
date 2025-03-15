@@ -16,7 +16,7 @@ public class Request {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_no", nullable = false, insertable = false, updatable = false, referencedColumnName="employeeNo")
+    @JoinColumn(name = "employee_no", nullable = false, referencedColumnName="employeeNo")
     private OrganizationEmployees employee;
 
     @Column(name = "title")

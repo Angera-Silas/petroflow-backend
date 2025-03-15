@@ -14,7 +14,7 @@ public class Incident {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_no", nullable = false, insertable = false, updatable = false, referencedColumnName="employeeNo")
+    @JoinColumn(name = "employee_no", nullable = false,referencedColumnName="employeeNo")
     private OrganizationEmployees organizationEmployees;
 
     @Column(name = "title")

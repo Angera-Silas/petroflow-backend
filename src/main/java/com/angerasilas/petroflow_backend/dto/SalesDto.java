@@ -1,10 +1,11 @@
 package com.angerasilas.petroflow_backend.dto;
 
-import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -15,6 +16,8 @@ public class SalesDto {
     private Date dateTime;
     private Long productId;
     private String employeeNo;
+    private Long sellPointId;
+    private Long shiftId;
     private String unitsSold;
     private double amountBilled;
     private double discount;

@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ShiftDto {
     private Long id;
+    private Long facilityId;
     private String employeeNo;
     private Date startDate;
     private Date endDate;

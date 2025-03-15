@@ -1,21 +1,29 @@
 package com.angerasilas.petroflow_backend.controller;
 
-import com.angerasilas.petroflow_backend.dto.SellPointDto;
-import com.angerasilas.petroflow_backend.service.SellPointService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.angerasilas.petroflow_backend.dto.SellPointDto;
+import com.angerasilas.petroflow_backend.service.SellPointService;
+
 @RestController
-@RequestMapping("/api/sell-points")
+@RequestMapping("/api/sellpoints")
 public class SellPointController {
 
     @Autowired
     private SellPointService sellPointService;
 
-    @PostMapping("/add")
+    @PostMapping("/create")
     public ResponseEntity<SellPointDto> createSellPoint(@RequestBody SellPointDto sellPointDto) {
         SellPointDto createdSellPoint = sellPointService.createSellPoint(sellPointDto);
         return ResponseEntity.ok(createdSellPoint);
@@ -42,6 +50,18 @@ public class SellPointController {
     @GetMapping("/get/all")
     public ResponseEntity<List<SellPointDto>> getAllSellPoints() {
         List<SellPointDto> sellPoints = sellPointService.getAllSellPoints();
+        return ResponseEntity.ok(sellPoints);
+    }
+
+    @GetMapping("/get/byname/{name}")
+    public ResponseEntity<SellPointDto> getSellPointByName(@PathVariable String name) {
+        SellPointDto sellPoint = sellPointService.getSellPointByName(name);
+        return ResponseEntity.ok(sellPoint);
+    }
+
+    @GetMapping("/get/byfacility/{facilityId}")
+    public ResponseEntity<List<SellPointDto>> getSellPointsByFacilityId(@PathVariable("facilityId") Long facilityId) {
+        List<SellPointDto> sellPoints = sellPointService.getSellPointsByFacilityId(facilityId);
         return ResponseEntity.ok(sellPoints);
     }
 

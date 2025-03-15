@@ -1,61 +1,76 @@
 package com.angerasilas.petroflow_backend.mapper;
 
-import com.angerasilas.petroflow_backend.dto.SalesDto;
-import com.angerasilas.petroflow_backend.entity.Sales;
-import com.angerasilas.petroflow_backend.repository.OrganizationEmployeesRepository;
-import com.angerasilas.petroflow_backend.repository.ProductRepository;
-
 import org.springframework.stereotype.Component;
+
+import com.angerasilas.petroflow_backend.dto.SalesDto;
+import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
+import com.angerasilas.petroflow_backend.entity.Product;
+import com.angerasilas.petroflow_backend.entity.Sales;
+import com.angerasilas.petroflow_backend.entity.SellPoint;
+import com.angerasilas.petroflow_backend.entity.Shift;
 
 @Component
 public class SalesMapper {
 
-    private OrganizationEmployeesRepository organizationRepository;
-    private ProductRepository productRepository;
-
-    public SalesDto toDto(Sales sales) {
+    public static SalesDto mapToSalesDto(Sales sales) {
         if (sales == null) {
             return null;
         }
 
-        SalesDto salesDto = new SalesDto();
-        salesDto.setId(sales.getId());
-        salesDto.setDateTime(sales.getDateTime());
-        salesDto.setProductId(sales.getProduct() != null ? sales.getProduct().getId() : null);
-        salesDto.setEmployeeNo(sales.getEmployee() != null ? sales.getEmployee().getEmployeeNo() : null);
-        salesDto.setUnitsSold(sales.getUnitsSold());
-        salesDto.setAmountBilled(sales.getAmountBilled());
-        salesDto.setDiscount(sales.getDiscount());
-        salesDto.setAmountPaid(sales.getAmountPaid());
-        salesDto.setPaymentMethod(sales.getPaymentMethod());
-        salesDto.setPaymentStatus(sales.getPaymentStatus());
-        salesDto.setBalance(sales.getBalance());
-        salesDto.setStatus(sales.getStatus());
-
-        return salesDto;
+        return new SalesDto(
+            sales.getId(),
+            sales.getDateTime(),
+            sales.getProduct() != null ? sales.getProduct().getId() : null,
+            sales.getEmployee() != null ? sales.getEmployee().getEmployeeNo() : null,
+            sales.getSellPoint() != null ? sales.getSellPoint().getId() : null,
+            sales.getShift() != null ? sales.getShift().getId() : null,
+            sales.getUnitsSold(),
+            sales.getAmountBilled(),
+            sales.getDiscount(),
+            sales.getAmountPaid(),
+            sales.getPaymentMethod(),
+            sales.getPaymentStatus(),
+            sales.getBalance(),
+            sales.getStatus()
+        );
     }
 
-    public Sales toEntity(SalesDto salesDto) {
+    public static Sales mapToSales(SalesDto salesDto, Product product, OrganizationEmployees employee, SellPoint sellPoint, Shift shift) {
         if (salesDto == null) {
             return null;
         }
 
-        Sales sales = new Sales();
-        sales.setId(salesDto.getId());
-        sales.setDateTime(salesDto.getDateTime());
-        sales.setProduct(productRepository.findById(salesDto.getProductId()).orElse(null));
-        sales.getProduct().setId(salesDto.getProductId());
-        sales.setEmployee(organizationRepository.findByEmployeeNo(salesDto.getEmployeeNo()).orElse(null));
-        sales.getEmployee().setEmployeeNo(salesDto.getEmployeeNo());
-        sales.setUnitsSold(salesDto.getUnitsSold());
-        sales.setAmountBilled(salesDto.getAmountBilled());
-        sales.setDiscount(salesDto.getDiscount());
-        sales.setAmountPaid(salesDto.getAmountPaid());
-        sales.setPaymentMethod(salesDto.getPaymentMethod());
-        sales.setPaymentStatus(salesDto.getPaymentStatus());
-        sales.setBalance(salesDto.getBalance());
-        sales.setStatus(salesDto.getStatus());
+        if (product == null) {
+            throw new IllegalArgumentException("Product cannot be null");
+        }
 
-        return sales;
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee cannot be null");
+        }
+
+        if (sellPoint == null) {
+            throw new IllegalArgumentException("SellPoint cannot be null");
+        }
+
+        if (shift == null) {
+            throw new IllegalArgumentException("Shift cannot be null");
+        }
+
+        return new Sales(
+            salesDto.getId(),
+            salesDto.getDateTime(),
+            product,
+            employee,
+            sellPoint,
+            shift,
+            salesDto.getUnitsSold(),
+            salesDto.getAmountBilled(),
+            salesDto.getDiscount(),
+            salesDto.getAmountPaid(),
+            salesDto.getPaymentMethod(),
+            salesDto.getPaymentStatus(),
+            salesDto.getBalance(),
+            salesDto.getStatus()
+        );
     }
 }

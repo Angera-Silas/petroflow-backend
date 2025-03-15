@@ -16,7 +16,11 @@ public class Shift {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "employee_no", nullable = false, insertable = false, updatable = false, referencedColumnName="employeeNo")
+    @JoinColumn(name = "facility_id", referencedColumnName = "id")
+    private Facility facility;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_no", nullable = false, referencedColumnName="employeeNo")
     private OrganizationEmployees employee;
 
     @Column(name = "start_date", nullable = false)
@@ -38,5 +42,8 @@ public class Shift {
 
     @OneToMany(mappedBy="shift")
     private Set<PumpMeterReading> pumpMeterReading;
+
+    @OneToMany(mappedBy="shift")
+    private Set<Sales> sales;
 
 }
