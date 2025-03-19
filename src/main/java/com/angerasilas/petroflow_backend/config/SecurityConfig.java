@@ -16,7 +16,7 @@ public class SecurityConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:5173", "http://localhost:8081", "http://192.168.2.100:8081",
-                "https://snzkpkvg-8081.uks1.devtunnels.ms") // React and Flutter dev servers
+                "https://snzkpkvg-8081.uks1.devtunnels.ms", "http://localhost:4173") // React and Flutter dev servers
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);

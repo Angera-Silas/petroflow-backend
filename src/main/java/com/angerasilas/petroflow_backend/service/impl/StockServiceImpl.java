@@ -2,11 +2,20 @@ package com.angerasilas.petroflow_backend.service.impl;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.angerasilas.petroflow_backend.dto.StockDto;
+import com.angerasilas.petroflow_backend.dto.StockInfoDto;
+import com.angerasilas.petroflow_backend.entity.Facility;
+import com.angerasilas.petroflow_backend.entity.Organization;
+import com.angerasilas.petroflow_backend.entity.Product;
 import com.angerasilas.petroflow_backend.entity.Stock;
 import com.angerasilas.petroflow_backend.mapper.StockMapper;
+import com.angerasilas.petroflow_backend.repository.FacilityRepository;
+import com.angerasilas.petroflow_backend.repository.OrganizationRepository;
+import com.angerasilas.petroflow_backend.repository.ProductRepository;
 import com.angerasilas.petroflow_backend.repository.StockRepository;
 import com.angerasilas.petroflow_backend.service.StockService;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +25,27 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class StockServiceImpl implements StockService {
 
+    @Autowired
     private final StockRepository stockRepository;
+
+    @Autowired
     private final StockMapper stockMapper;
+
+    @Autowired
+    private final ProductRepository productRepository;
+
+    @Autowired
+    private final OrganizationRepository organizationRepository;
+
+    @Autowired
+    private final FacilityRepository facilityRepository;
 
     @Override
     public StockDto createStock(StockDto stockDto) {
-        Stock stock = stockMapper.toEntity(stockDto);
+        Product product = productRepository.findById(stockDto.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+        Organization organization = organizationRepository.findById(stockDto.getOrgId()).orElseThrow(() -> new RuntimeException("Organization not found"));
+        Facility facility = facilityRepository.findById(stockDto.getFacilityId()).orElseThrow(() -> new RuntimeException("Facility not found"));
+        Stock stock = stockMapper.toEntity(stockDto, product, organization, facility);
         stock = stockRepository.save(stock);
         return stockMapper.toDto(stock);
     }
@@ -56,5 +80,20 @@ public class StockServiceImpl implements StockService {
     @Override
     public void deleteStock(Long id) {
         stockRepository.deleteById(id);
+    }
+
+    @Override
+    public List<StockInfoDto> getStockInfo(){
+        return stockRepository.findStockInfo();
+    }
+
+    @Override
+    public List<StockInfoDto> getStockInfoByOrganization(Long orgId){
+        return stockRepository.findStockInfoByOrgId(orgId);
+    }
+
+    @Override
+    public List<StockInfoDto> getStockInfoByOrganizationAndFacility(Long orgId, Long facilityId){
+        return stockRepository.findStockInfoByOrgIdAndFacilityId(orgId, facilityId);
     }
 }

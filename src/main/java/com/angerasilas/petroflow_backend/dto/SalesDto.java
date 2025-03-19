@@ -7,12 +7,15 @@ import lombok.Setter;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class SalesDto {
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateTime;
     private Long productId;
     private String employeeNo;

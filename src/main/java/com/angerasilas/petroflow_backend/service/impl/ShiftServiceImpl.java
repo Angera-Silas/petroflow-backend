@@ -1,5 +1,6 @@
 package com.angerasilas.petroflow_backend.service.impl;
 
+import com.angerasilas.petroflow_backend.dto.EmployeeShift;
 import com.angerasilas.petroflow_backend.dto.ShiftDto;
 import com.angerasilas.petroflow_backend.entity.Facility;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
@@ -122,4 +123,36 @@ public class ShiftServiceImpl implements ShiftService {
                 .collect(Collectors.toList());
     }
     
+    @Override
+    public List<EmployeeShift> findAllEmployeeShifts() {
+        return shiftRepository.findAllEmployeeShifts();
+    }
+
+    @Override
+    public List<EmployeeShift> findEmployeeShiftsByOrgId(Long orgId) {
+        return shiftRepository.findEmployeeShiftsByOrgId(orgId);
+    }
+
+    @Override
+    public List<EmployeeShift> findEmployeeShiftsByFacilityId(Long facilityId) {
+        return shiftRepository.findEmployeeShiftsByFacilityId(facilityId);
+    }
+
+    @Override
+    public List<EmployeeShift> findEmployeeShiftsByType(String type) {
+        return shiftRepository.findEmployeeShiftsByType(Shift.ShiftType.valueOf(type));
+    }
+
+    @Override
+    public List<EmployeeShift> findEmployeeShiftsByEmployeeNo(String employeeNo) {
+        return shiftRepository.findEmployeeShiftsByEmployeeNo(employeeNo);
+    }
+
+    @Override
+    public List<ShiftDto> getActiveShifts() {
+        return shiftRepository.findActiveShifts()
+                .stream()
+                .map(ShiftMapper::mapToShiftDto)
+                .collect(Collectors.toList());
+    }
 }

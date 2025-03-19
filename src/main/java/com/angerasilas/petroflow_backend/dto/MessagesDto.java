@@ -3,6 +3,7 @@ package com.angerasilas.petroflow_backend.dto;
 import lombok.Data;
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class MessagesDto {
     private Long senderId;
     private Long receiverId;
     private String message;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date dateSent;
     private String status;
 }

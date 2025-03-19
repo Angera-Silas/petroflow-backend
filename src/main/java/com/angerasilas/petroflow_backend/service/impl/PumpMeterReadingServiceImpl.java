@@ -1,5 +1,6 @@
 package com.angerasilas.petroflow_backend.service.impl;
 
+import com.angerasilas.petroflow_backend.dto.MeterReadingDto;
 import com.angerasilas.petroflow_backend.dto.PumpMeterReadingDto;
 import com.angerasilas.petroflow_backend.entity.PumpMeterReading;
 import com.angerasilas.petroflow_backend.mapper.PumpMeterReadingMapper;
@@ -55,4 +56,35 @@ public class PumpMeterReadingServiceImpl implements PumpMeterReadingService {
                 .map(pumpMeterReadingMapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<MeterReadingDto> getMeterReading() {
+        return pumpMeterReadingRepository.findMeterReading();
+    }
+
+    @Override
+    public MeterReadingDto getMeterReadingById(Long id) {
+        return pumpMeterReadingRepository.findMeterReadingById(id);
+    }
+
+    @Override
+    public List<MeterReadingDto> getMeterReadingByOrgId(Long orgId) {
+        return pumpMeterReadingRepository.findMeterReadingByOrgId(orgId);
+    }
+
+    @Override
+    public List<MeterReadingDto> getMeterReadingByFacilityId(Long facilityId) {
+        return pumpMeterReadingRepository.findMeterReadingByFacilityId(facilityId);
+    }
+
+    @Override
+    public List<MeterReadingDto> getMeterReadingBySellPointId(Long sellPointId) {
+        return pumpMeterReadingRepository.findMeterReadingBySellPointId(sellPointId);
+    }
+
+    @Override
+    public List<MeterReadingDto> getMeterReadingByShiftId(Long shiftId) {
+        return pumpMeterReadingRepository.findMeterReadingByShiftId(shiftId);
+    }
+
 }

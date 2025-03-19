@@ -3,6 +3,7 @@ package com.angerasilas.petroflow_backend.service;
 import java.util.List;
 
 import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
+import com.angerasilas.petroflow_backend.dto.DepartmentDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
@@ -29,4 +30,7 @@ public interface OrganizationEmployeeService {
     List<AvailableRolesDto> getDistinctRolesByOrganizationIdAndFacilityId(Long organizationId, Long facilityId);
     List<UserInfoDto> getEmployeesByOrganizationIdAndRole(Long organizationId, String role);
     List<UserInfoDto> getEmployeesByOrganizationIdAndFacilityIdAndRole(Long organizationId, Long facilityId, String role);
+
+    List<DepartmentDto> getDepartmentsByOrganizationId(Long organizationId);
+    List<DepartmentDto> getDepartmentsByOrganizationIdAndFacilityId(Long organizationId, Long facilityId);
 }

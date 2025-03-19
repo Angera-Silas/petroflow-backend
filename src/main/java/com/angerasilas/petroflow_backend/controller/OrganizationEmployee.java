@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
+import com.angerasilas.petroflow_backend.dto.DepartmentDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
@@ -128,5 +129,20 @@ public class OrganizationEmployee {
         List<UserInfoDto> employees = service.getEmployeesByOrganizationIdAndFacilityIdAndRole(organizationId, facilityId, role);
         return ResponseEntity.ok(employees);
     }
+
+    //get departments
+    @GetMapping("/get/organization/{organizationId}/departments")
+    public ResponseEntity<List<DepartmentDto>> getDepartmentsByOrganizationId(@PathVariable Long organizationId) {
+        List<DepartmentDto> departments = service.getDepartmentsByOrganizationId(organizationId);
+        return ResponseEntity.ok(departments);
+    }
+
+    @GetMapping("/get/organization/{organizationId}/facility/{facilityId}/departments")
+    public ResponseEntity<List<DepartmentDto>> getDepartmentsByOrganizationIdAndFacilityId(
+            @PathVariable Long organizationId, @PathVariable Long facilityId) {
+        List<DepartmentDto> departments = service.getDepartmentsByOrganizationIdAndFacilityId(organizationId, facilityId);
+        return ResponseEntity.ok(departments);
+    }
+    
 
 }

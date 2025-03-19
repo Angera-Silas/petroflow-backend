@@ -23,11 +23,11 @@ public class Stock {
     private Product product;
 
     @ManyToOne
-    @JoinColumn(name = "org_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "org_id", referencedColumnName = "id")
     private Organization organization;
 
     @ManyToOne
-    @JoinColumn(name = "facility_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "facility_id", referencedColumnName = "id")
     private Facility facility;
 
     @Column(name = "units_available")

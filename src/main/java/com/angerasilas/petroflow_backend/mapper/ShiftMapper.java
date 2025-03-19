@@ -21,7 +21,8 @@ public class ShiftMapper {
             shift.getEmployee().getEmployeeNo(),
             shift.getStartDate(),
             shift.getEndDate(),
-            shift.getType().name()
+            shift.getType().name(),
+            shift.getSellingPoints()
         );
     }
 
@@ -41,6 +42,7 @@ public class ShiftMapper {
             dto.getStartDate(),
             dto.getEndDate(),
             Shift.ShiftType.valueOf(dto.getType()),
+            dto.getSellingPoints(),
             null,
             null
         );

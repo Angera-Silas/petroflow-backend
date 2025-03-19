@@ -35,7 +35,7 @@ public class PumpMeterReading {
     @Column(name = "start_reading", nullable = false)
     private double startReading;
 
-    @Column(name = "end_reading", nullable = false)
+    @Column(name = "end_reading")
     private double endReading;
 
     @Column(name = "reading_date", nullable = false)
@@ -44,13 +44,13 @@ public class PumpMeterReading {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @Column(name = "created_by", nullable = false)
     private String createdBy;
 
-    @Column(name = "updated_by", nullable = false)
+    @Column(name = "updated_by")
     private String updatedBy;
 
     @Column(name = "status", nullable = false)

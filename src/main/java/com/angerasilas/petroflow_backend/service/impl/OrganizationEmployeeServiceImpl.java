@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
+import com.angerasilas.petroflow_backend.dto.DepartmentDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.OrganizationEmployeeDto;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
@@ -113,5 +114,15 @@ public class OrganizationEmployeeServiceImpl implements OrganizationEmployeeServ
     @Override
     public List<UserInfoDto> getEmployeesByOrganizationIdAndFacilityIdAndRole(Long organizationId, Long facilityId, String role) {
         return organizationEmployeesRepository.findEmployeesByOrganizationIdAndFacilityIdAndRole(organizationId, facilityId, role);
+    }
+
+    @Override
+    public List<DepartmentDto> getDepartmentsByOrganizationId(Long organizationId) {
+        return organizationEmployeesRepository.findDepartmentsByOrganizationId(organizationId);
+    }
+
+    @Override
+    public List<DepartmentDto> getDepartmentsByOrganizationIdAndFacilityId(Long organizationId, Long facilityId) {
+        return organizationEmployeesRepository.findDepartmentsByOrganizationIdAndFacilityId(organizationId, facilityId);
     }
 }

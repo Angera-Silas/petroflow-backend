@@ -2,9 +2,11 @@ package com.angerasilas.petroflow_backend.dto;
 
 import java.time.LocalDateTime;
 
+import com.angerasilas.petroflow_backend.entity.Shift;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,12 +15,15 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PumpMeterReadingDto {
+@Data
+public class MeterReadingDto {
     private Long id;
-    private Long organizationId;
-    private Long facilityId;
+    private String organizationName;
+    private String facilityName;
     private Long sellPointId;
+    private String sellPointName;
     private Long shiftId;
+    private Shift.ShiftType shiftType;
     private double startReading;
     private double endReading;
 
@@ -35,4 +40,6 @@ public class PumpMeterReadingDto {
     private String updatedBy;
     private String status;
     private double totalVolume;
+
+    
 }

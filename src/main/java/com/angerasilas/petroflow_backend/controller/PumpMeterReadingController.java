@@ -1,5 +1,6 @@
 package com.angerasilas.petroflow_backend.controller;
 
+import com.angerasilas.petroflow_backend.dto.MeterReadingDto;
 import com.angerasilas.petroflow_backend.dto.PumpMeterReadingDto;
 import com.angerasilas.petroflow_backend.service.PumpMeterReadingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,4 +45,44 @@ public class PumpMeterReadingController {
         List<PumpMeterReadingDto> pumpMeterReadings = pumpMeterReadingService.getAllPumpMeterReadings();
         return ResponseEntity.ok(pumpMeterReadings);
     }
+
+    @GetMapping("/get/general/meter-reading")
+    public ResponseEntity<List<MeterReadingDto>> getMeterReading() {
+        List<MeterReadingDto> meterReadings = pumpMeterReadingService.getMeterReading();
+        return ResponseEntity.ok(meterReadings);
+    }
+
+    @GetMapping("/get/meter-reading/{id}")
+    public ResponseEntity<MeterReadingDto> getMeterReadingById(@PathVariable Long id) {
+        MeterReadingDto meterReading = pumpMeterReadingService.getMeterReadingById(id);
+        return ResponseEntity.ok(meterReading);
+    }
+
+    @GetMapping("/get/meter-reading/org/{orgId}")
+    public ResponseEntity<List<MeterReadingDto>> getMeterReadingByOrgId(@PathVariable Long orgId) {
+        List<MeterReadingDto> meterReadings = pumpMeterReadingService.getMeterReadingByOrgId(orgId);
+        return ResponseEntity.ok(meterReadings);
+    }
+
+    @GetMapping("/get/meter-reading/facility/{facilityId}")
+    public ResponseEntity<List<MeterReadingDto>> getMeterReadingByFacilityId(@PathVariable Long facilityId) {
+        List<MeterReadingDto> meterReadings = pumpMeterReadingService.getMeterReadingByFacilityId(facilityId);
+        return ResponseEntity.ok(meterReadings);
+    }
+
+
+    @GetMapping("/get/meter-reading/sell-point/{sellPointId}")
+    public ResponseEntity<List<MeterReadingDto>> getMeterReadingBySellPointId(@PathVariable Long sellPointId) {
+        List<MeterReadingDto> meterReadings = pumpMeterReadingService.getMeterReadingBySellPointId(sellPointId);
+        return ResponseEntity.ok(meterReadings);
+    }
+
+    @GetMapping("/get/meter-reading/shift/{shiftId}")
+    public ResponseEntity<List<MeterReadingDto>> getMeterReadingByShiftId(@PathVariable Long shiftId) {
+        List<MeterReadingDto> meterReadings = pumpMeterReadingService.getMeterReadingByShiftId(shiftId);
+        return ResponseEntity.ok(meterReadings);
+    }
+
+
+
 }

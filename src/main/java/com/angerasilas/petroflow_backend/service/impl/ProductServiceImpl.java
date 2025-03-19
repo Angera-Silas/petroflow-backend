@@ -65,4 +65,16 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
     }
+
+    @Override
+    public List<ProductDto> getProductsByOrgId(Long orgId) {
+        return productRepository.findByOrganizationId(orgId).stream().map(ProductMapper::mapToProductDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDto> getProductsByFacilityId(Long facilityId) {
+        return productRepository.findByFacilityId(facilityId).stream().map(ProductMapper::mapToProductDto)
+                .collect(Collectors.toList());
+    }
 }

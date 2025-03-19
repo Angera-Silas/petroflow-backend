@@ -1,5 +1,6 @@
 package com.angerasilas.petroflow_backend.controller;
 
+import com.angerasilas.petroflow_backend.dto.EmployeeShift;
 import com.angerasilas.petroflow_backend.dto.ShiftDto;
 import com.angerasilas.petroflow_backend.service.ShiftService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,8 @@ public class ShiftController {
         return ResponseEntity.ok(shifts);
     }
 
+
+
     @GetMapping("/get/byfacility/{facilityId}")
     public ResponseEntity<List<ShiftDto>> getShiftsByFacilityId(@PathVariable Long facilityId) {
         List<ShiftDto> shifts = shiftService.getShiftsByFacilityId(facilityId);
@@ -79,5 +82,41 @@ public class ShiftController {
     public ResponseEntity<List<ShiftDto>> getShiftsByFacilityIdAndTypeAndEmployeeNo(@PathVariable Long facilityId, @PathVariable String type, @PathVariable String employeeNo) {
         List<ShiftDto> shifts = shiftService.getShiftsByFacilityIdAndTypeAndEmployeeNo(facilityId, type, employeeNo);
         return ResponseEntity.ok(shifts);
+    }
+
+    @GetMapping("/get/all/employees")
+    public ResponseEntity<List<EmployeeShift>> findAllEmployeeShifts() {
+        List<EmployeeShift> employeeShifts = shiftService.findAllEmployeeShifts();
+        return ResponseEntity.ok(employeeShifts);
+    }
+
+    @GetMapping("/get/org/{orgId}")
+    public ResponseEntity<List<EmployeeShift>> findEmployeeShiftsByOrgId(@PathVariable Long orgId) {
+        List<EmployeeShift> employeeShifts = shiftService.findEmployeeShiftsByOrgId(orgId);
+        return ResponseEntity.ok(employeeShifts);
+    }
+
+    @GetMapping("/get/facility/{facilityId}")
+    public ResponseEntity<List<EmployeeShift>> findEmployeeShiftsByFacilityId(@PathVariable Long facilityId) {
+        List<EmployeeShift> employeeShifts = shiftService.findEmployeeShiftsByFacilityId(facilityId);
+        return ResponseEntity.ok(employeeShifts);
+    }
+
+    @GetMapping("/get/type/{type}")
+    public ResponseEntity<List<EmployeeShift>> findEmployeeShiftsByType(@PathVariable String type) {
+        List<EmployeeShift> employeeShifts = shiftService.findEmployeeShiftsByType(type);
+        return ResponseEntity.ok(employeeShifts);
+    }
+
+    @GetMapping("/get/employee/{employeeNo}")
+    public ResponseEntity<List<EmployeeShift>> findEmployeeShiftsByEmployeeNo(@PathVariable String employeeNo) {
+        List<EmployeeShift> employeeShifts = shiftService.findEmployeeShiftsByEmployeeNo(employeeNo);
+        return ResponseEntity.ok(employeeShifts);
+    }
+
+    @GetMapping("/get/active")
+    public ResponseEntity<List<ShiftDto>> getActiveShifts() {
+        List<ShiftDto> activeShifts = shiftService.getActiveShifts();
+        return ResponseEntity.ok(activeShifts);
     }
 }

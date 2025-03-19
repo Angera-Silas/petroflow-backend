@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
 import com.angerasilas.petroflow_backend.entity.composite_key.OrganizationEmployeeId;
 import com.angerasilas.petroflow_backend.dto.AvailableRolesDto;
+import com.angerasilas.petroflow_backend.dto.DepartmentDto;
 import com.angerasilas.petroflow_backend.dto.EmployeeDetailsDto;
 import com.angerasilas.petroflow_backend.dto.UserInfoDto;
 
@@ -90,6 +91,8 @@ public interface OrganizationEmployeesRepository extends JpaRepository<Organizat
                         "WHERE o.id = :organizationId")
         List<AvailableRolesDto> findDistinctRolesByOrganizationId(@Param("organizationId") Long organizationId);
 
+        
+
         /**
          * Get distinct user roles available in each facility.
          */
@@ -146,4 +149,30 @@ public interface OrganizationEmployeesRepository extends JpaRepository<Organizat
                         @Param("organizationId") Long organizationId,
                         @Param("facilityId") Long facilityId,
                         @Param("role") String role);
+
+
+        /**
+         * Get distinct departments in each organization
+         * */
+
+         @Query("SELECT DISTINCT new com.angerasilas.petroflow_backend.dto.DepartmentDto(o.id, f.id, oe.department) " +
+                        "FROM OrganizationEmployees oe " +
+                        "JOIN oe.organization o " +
+                        "JOIN oe.facility f " +
+                        "WHERE o.id = :organizationId")
+        List<DepartmentDto> findDepartmentsByOrganizationId(@Param("organizationId") Long organizationId);
+
+
+        /**
+         * Get distinct departments in each facility
+         * */
+
+         @Query("SELECT DISTINCT new com.angerasilas.petroflow_backend.dto.DepartmentDto(o.id, f.id, oe.department) " +
+                        "FROM OrganizationEmployees oe " +
+                        "JOIN oe.organization o " +
+                        "JOIN oe.facility f " +
+                        "WHERE o.id = :organizationId AND f.id = :facilityId")
+        List<DepartmentDto> findDepartmentsByOrganizationIdAndFacilityId(
+                        @Param("organizationId") Long organizationId,
+                        @Param("facilityId") Long facilityId);
 }

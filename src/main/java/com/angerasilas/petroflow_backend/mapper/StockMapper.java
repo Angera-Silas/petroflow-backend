@@ -1,20 +1,18 @@
 package com.angerasilas.petroflow_backend.mapper;
 
 import org.springframework.stereotype.Component;
+
 import com.angerasilas.petroflow_backend.dto.StockDto;
+import com.angerasilas.petroflow_backend.entity.Facility;
+import com.angerasilas.petroflow_backend.entity.Organization;
+import com.angerasilas.petroflow_backend.entity.Product;
 import com.angerasilas.petroflow_backend.entity.Stock;
-import com.angerasilas.petroflow_backend.repository.OrganizationRepository;
-import com.angerasilas.petroflow_backend.repository.FacilityRepository;
-import com.angerasilas.petroflow_backend.repository.ProductRepository;
+
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class StockMapper {
-
-    private final OrganizationRepository organizationRepository;
-    private final FacilityRepository facilityRepository;
-    private final ProductRepository productRepository;
 
     public StockDto toDto(Stock stock) {
         StockDto dto = new StockDto();
@@ -34,7 +32,7 @@ public class StockMapper {
         return dto;
     }
 
-    public Stock toEntity(StockDto stockDto) {
+    public Stock toEntity(StockDto stockDto, Product product, Organization organization, Facility facility) {
         Stock entity = new Stock();
         entity.setId(stockDto.getId());
         entity.setDateStocked(stockDto.getDateStocked());
@@ -46,9 +44,9 @@ public class StockMapper {
         entity.setUnitsLost(stockDto.getUnitsLost());
         entity.setBuyingPricePerUnit(stockDto.getBuyingPricePerUnit());
         entity.setSellingPricePerUnit(stockDto.getSellingPricePerUnit());
-        entity.setProduct(productRepository.findById(stockDto.getProductId()).orElse(null));
-        entity.setOrganization(organizationRepository.findById(stockDto.getOrgId()).orElse(null));
-        entity.setFacility(facilityRepository.findById(stockDto.getFacilityId()).orElse(null));
+        entity.setProduct(product);
+        entity.setOrganization(organization);
+        entity.setFacility(facility);
         return entity;
     }
 }

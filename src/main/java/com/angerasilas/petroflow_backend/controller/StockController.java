@@ -5,8 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.angerasilas.petroflow_backend.dto.StockDto;
+import com.angerasilas.petroflow_backend.dto.StockInfoDto;
 import com.angerasilas.petroflow_backend.service.StockService;
 import lombok.RequiredArgsConstructor;
+
 
 @RequiredArgsConstructor
 @RestController
@@ -44,4 +46,23 @@ public class StockController {
         stockService.deleteStock(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/get/general-stock")
+    public ResponseEntity<List<StockInfoDto>> getAllStockInfo(){
+        List<StockInfoDto> stocks = stockService.getStockInfo();
+        return ResponseEntity.ok(stocks);
+    }
+
+    @GetMapping("/get/stock/organization/{orgId}")
+    public ResponseEntity<List<StockInfoDto>> getStockByOrg(@PathVariable("orgId") Long orgId) {
+        List<StockInfoDto> stocks = stockService.getStockInfoByOrganization(orgId);
+        return ResponseEntity.ok(stocks);
+    }
+
+    @GetMapping("/get/stock/organization/{orgId}/facility/{facilityId}")
+    public ResponseEntity<List<StockInfoDto>> getStockByOrgAndFacility(@PathVariable("orgId") Long orgId, @PathVariable("facilityId")  Long facilityId) {
+        List<StockInfoDto> stocks = stockService.getStockInfoByOrganizationAndFacility(orgId,facilityId);
+        return ResponseEntity.ok(stocks);
+    }
+    
 }

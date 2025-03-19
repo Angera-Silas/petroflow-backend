@@ -1,11 +1,11 @@
 package com.angerasilas.petroflow_backend.dto;
 
-import lombok.Data;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,15 +15,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class StockDto {
+public class StockInfoDto {
     private Long id;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dateStocked;
     
     private Long productId;
+    private String productName;
     private Long orgId;
+    private String orgName;
     private Long facilityId;
+    private String facilityName;
     private double unitsAvailable;
     private double unitsSold;
     private double unitsBought;
