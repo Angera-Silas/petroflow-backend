@@ -80,5 +80,8 @@ public interface ShiftRepository extends JpaRepository<Shift, Long> {
        @Query("SELECT s FROM Shift s WHERE s.endDate > CURRENT_TIMESTAMP")
        List<Shift> findActiveShifts();
 
+       //get shift where enddate or time is greater than current date and time and employeeNo
+       @Query("SELECT s FROM Shift s WHERE s.endDate > CURRENT_TIMESTAMP AND s.employee.employeeNo = :employeeNo")
+       List<Shift> findActiveShiftsByEmployeeNo(@Param("employeeNo") String employeeNo);
     
 }

@@ -1,6 +1,6 @@
 package com.angerasilas.petroflow_backend.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -23,16 +23,25 @@ public class PumpMeterReadingDto {
     private double endReading;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDateTime readingDate;
+    private Date readingDate;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createdAt;
+    private String createdAt;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updatedAt;
-
+    private String updatedAt;
     private String createdBy;
     private String updatedBy;
     private String status;
     private double totalVolume;
+
+    // Constructor for updates
+    public PumpMeterReadingDto(Long id, double endReading, String updatedBy, String updatedAt, String status,
+            double totalVolume) {
+        this.id = id;
+        this.endReading = endReading;
+        this.updatedBy = updatedBy;
+        this.updatedAt = updatedAt;
+        this.status = status;
+        this.totalVolume = totalVolume;
+    }
+
 }

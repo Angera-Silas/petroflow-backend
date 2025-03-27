@@ -1,13 +1,13 @@
 package com.angerasilas.petroflow_backend.mapper;
 
+import org.springframework.stereotype.Component;
+
 import com.angerasilas.petroflow_backend.dto.PumpMeterReadingDto;
 import com.angerasilas.petroflow_backend.entity.Facility;
 import com.angerasilas.petroflow_backend.entity.Organization;
 import com.angerasilas.petroflow_backend.entity.PumpMeterReading;
 import com.angerasilas.petroflow_backend.entity.SellPoint;
 import com.angerasilas.petroflow_backend.entity.Shift;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class PumpMeterReadingMapper {

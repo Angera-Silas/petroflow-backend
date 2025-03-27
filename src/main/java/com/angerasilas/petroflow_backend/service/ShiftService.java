@@ -24,4 +24,5 @@ public interface ShiftService {
     List<EmployeeShift> findEmployeeShiftsByEmployeeNo(String employeeNo);
 
     List<ShiftDto> getActiveShifts();
+    List<ShiftDto> getEmployeeNoAndActive(String employeeNo);
 }

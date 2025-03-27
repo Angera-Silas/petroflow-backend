@@ -119,4 +119,10 @@ public class ShiftController {
         List<ShiftDto> activeShifts = shiftService.getActiveShifts();
         return ResponseEntity.ok(activeShifts);
     }
+
+    @GetMapping("/get/active/{employeeNo}")
+    public ResponseEntity<List<ShiftDto>> getEmployeeNoAndActive(@PathVariable String employeeNo) {
+        List<ShiftDto> activeShifts = shiftService.getEmployeeNoAndActive(employeeNo);
+        return ResponseEntity.ok(activeShifts);
+    }
 }

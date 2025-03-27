@@ -2,7 +2,7 @@ package com.angerasilas.petroflow_backend.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -38,14 +38,16 @@ public class PumpMeterReading {
     @Column(name = "end_reading")
     private double endReading;
 
+    
     @Column(name = "reading_date", nullable = false)
-    private LocalDateTime readingDate;
+    private Date readingDate;
 
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+    @Column(name= "createdAt")
+    private String createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "updatedAt")
+    private String updatedAt;
+
 
     @Column(name = "created_by", nullable = false)
     private String createdBy;

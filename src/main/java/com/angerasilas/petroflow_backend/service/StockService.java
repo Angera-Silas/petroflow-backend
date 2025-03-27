@@ -16,4 +16,13 @@ public interface StockService {
     List<StockInfoDto> getStockInfoByOrganizationAndFacility(Long orgId, Long facilityId);
 
     List<StockInfoDto> getStockInfoByOrganization(Long orgId);
+
+    void updateStockLevels(Long productId, Long unitsSold);
+    void addIncomingStock(Long productId, Long unitsBought);
+    void addReturnedStock(Long productId, Long unitsReturned);
+    void addDamagedStock(Long productId, Long unitsDamaged);
+    void addLostStock(Long productId, Long unitsLost);
+    void updateBuyingPrice(Long productId, Double buyingPrice);
+    void updateSellingPrice(Long productId, Double sellingPrice);
+
 }

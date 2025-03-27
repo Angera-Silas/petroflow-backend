@@ -96,4 +96,40 @@ public class StockServiceImpl implements StockService {
     public List<StockInfoDto> getStockInfoByOrganizationAndFacility(Long orgId, Long facilityId){
         return stockRepository.findStockInfoByOrgIdAndFacilityId(orgId, facilityId);
     }
+
+    @Override
+    public void updateStockLevels(Long productId, Long unitsSold) {
+        stockRepository.updateStockLevels(productId, unitsSold);
+    }
+
+    @Override
+    public void addIncomingStock(Long productId, Long unitsBought) {
+        stockRepository.addIncomingStock(productId, unitsBought);
+    }
+
+    @Override
+    public void addReturnedStock(Long productId, Long unitsReturned) {
+        stockRepository.addReturnedStock(productId, unitsReturned);
+    }
+
+    @Override
+    public void addDamagedStock(Long productId, Long unitsDamaged) {
+        stockRepository.addDamagedStock(productId, unitsDamaged);
+    }
+
+    @Override
+    public void addLostStock(Long productId, Long unitsLost) {
+        stockRepository.addLostStock(productId, unitsLost);
+    }
+
+    @Override
+    public void updateBuyingPrice(Long productId, Double buyingPrice) {
+        stockRepository.updateBuyingPrice(productId, buyingPrice);
+    }
+
+    @Override
+    public void updateSellingPrice(Long productId, Double sellingPrice) {
+        stockRepository.updateSellingPrice(productId, sellingPrice);
+    }
+    
 }

@@ -17,14 +17,18 @@ public class PumpMeterReadingController {
     private PumpMeterReadingService pumpMeterReadingService;
 
     @PostMapping("/add")
-    public ResponseEntity<PumpMeterReadingDto> createPumpMeterReading(@RequestBody PumpMeterReadingDto pumpMeterReadingDto) {
-        PumpMeterReadingDto createdPumpMeterReading = pumpMeterReadingService.createPumpMeterReading(pumpMeterReadingDto);
+    public ResponseEntity<PumpMeterReadingDto> createPumpMeterReading(
+            @RequestBody PumpMeterReadingDto pumpMeterReadingDto) {
+        PumpMeterReadingDto createdPumpMeterReading = pumpMeterReadingService
+                .createPumpMeterReading(pumpMeterReadingDto);
         return ResponseEntity.ok(createdPumpMeterReading);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<PumpMeterReadingDto> updatePumpMeterReading(@PathVariable Long id, @RequestBody PumpMeterReadingDto pumpMeterReadingDto) {
-        PumpMeterReadingDto updatedPumpMeterReading = pumpMeterReadingService.updatePumpMeterReading(id, pumpMeterReadingDto);
+    public ResponseEntity<PumpMeterReadingDto> updatePumpMeterReading(@PathVariable Long id,
+            @RequestBody PumpMeterReadingDto pumpMeterReadingDto) {
+        PumpMeterReadingDto updatedPumpMeterReading = pumpMeterReadingService.updatePumpMeterReading(id,
+                pumpMeterReadingDto);
         return ResponseEntity.ok(updatedPumpMeterReading);
     }
 
@@ -70,7 +74,6 @@ public class PumpMeterReadingController {
         return ResponseEntity.ok(meterReadings);
     }
 
-
     @GetMapping("/get/meter-reading/sell-point/{sellPointId}")
     public ResponseEntity<List<MeterReadingDto>> getMeterReadingBySellPointId(@PathVariable Long sellPointId) {
         List<MeterReadingDto> meterReadings = pumpMeterReadingService.getMeterReadingBySellPointId(sellPointId);
@@ -83,6 +86,23 @@ public class PumpMeterReadingController {
         return ResponseEntity.ok(meterReadings);
     }
 
+    @PutMapping("/record/endreading/{id}")
+    public ResponseEntity<PumpMeterReadingDto> updateEndPumpMeterReading(
+            @PathVariable Long id,
+            @RequestBody PumpMeterReadingDto pumpMeterReadingDto) {
+        // Calculate totalVolume based on startReading and endReading
+        double totalVolume = pumpMeterReadingDto.getEndReading() - pumpMeterReadingDto.getStartReading();
 
+        // Create a new DTO using the update-specific constructor
+        PumpMeterReadingDto updatedDto = new PumpMeterReadingDto(
+                id,
+                pumpMeterReadingDto.getEndReading(),
+                pumpMeterReadingDto.getUpdatedBy(),
+                pumpMeterReadingDto.getUpdatedAt(),
+                pumpMeterReadingDto.getStatus(),
+                totalVolume);
+        PumpMeterReadingDto updatedPumpMeterReading = pumpMeterReadingService.updateEndPumpMeterReading(id, updatedDto);
+        return ResponseEntity.ok(updatedPumpMeterReading);
+    }
 
 }

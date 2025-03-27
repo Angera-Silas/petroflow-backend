@@ -155,4 +155,13 @@ public class ShiftServiceImpl implements ShiftService {
                 .map(ShiftMapper::mapToShiftDto)
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    public List<ShiftDto> getEmployeeNoAndActive(String employeeNo) {
+        return shiftRepository.findActiveShiftsByEmployeeNo(employeeNo)
+                .stream()
+                .map(ShiftMapper::mapToShiftDto)
+                .collect(Collectors.toList());
+    }
 }

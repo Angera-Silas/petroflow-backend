@@ -1,6 +1,7 @@
 package com.angerasilas.petroflow_backend.service.impl;
 
 import com.angerasilas.petroflow_backend.dto.SalesDto;
+import com.angerasilas.petroflow_backend.dto.SalesInfo;
 import com.angerasilas.petroflow_backend.entity.OrganizationEmployees;
 import com.angerasilas.petroflow_backend.entity.Product;
 import com.angerasilas.petroflow_backend.entity.Sales;
@@ -16,6 +17,7 @@ import com.angerasilas.petroflow_backend.service.SalesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -89,5 +91,60 @@ public class SalesServiceImpl implements SalesService {
         return salesRepository.findAll().stream()
                 .map(SalesMapper::mapToSalesDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SalesInfo> getSalesInfo() {
+        return salesRepository.getSalesInfo();
+    }
+
+    @Override
+    public List<SalesInfo> getOrganizationSalesInfo(Long orgId) {
+        return salesRepository.getOrganizationSalesInfo(orgId);
+    }
+
+    @Override
+    public List<SalesInfo> getOrganizationFacilitySalesInfo(Long orgId, Long facilityId) {
+        return salesRepository.getOrganizationFacilitySalesInfo(orgId, facilityId);
+    }
+
+    @Override
+    public List<SalesInfo> getFacilitySalesInfo(Long facilityId) {
+        return salesRepository.getFacilitySalesInfo(facilityId);
+    }
+
+    @Override
+    public List<SalesInfo> getPersonalSalesInfoByOrganization(Long orgId, Long facilityId, String employeeNo) {
+        return salesRepository.getPersonalSalesInfoByOrganization(orgId, facilityId, employeeNo);
+    }
+
+    @Override
+    public List<SalesInfo> getPersonalSalesInfo(String employeeNo) {
+        return salesRepository.getPersonalSalesInfo(employeeNo);
+    }
+
+    @Override
+    public List<SalesInfo> getSellingPointSalesInfo(Long sellPointId) {
+        return salesRepository.getSellingPointSalesInfo(sellPointId);
+    }
+
+    @Override
+    public List<SalesInfo> getProductSalesInfo(Long productId) {
+        return salesRepository.getProductSalesInfo(productId);
+    }
+
+    @Override
+    public List<SalesInfo> getShiftSalesInfo(Long shiftId) {
+        return salesRepository.getShiftSalesInfo(shiftId);
+    }
+
+    @Override
+    public List<SalesInfo> getSalesByDate(LocalDateTime startDate, LocalDateTime endDate) {
+        return salesRepository.getSalesByDate(startDate, endDate);
+    }
+
+    @Override
+    public List<SalesInfo> getYearlySalesInfo(int year) {
+        return salesRepository.getYearlySalesInfo(year);
     }
 }
