@@ -64,7 +64,7 @@ public class FacilityController {
 
 
     @GetMapping("/organization/{organizationId}")
-    public List<FacilityDto> getFacilitiesByOrganization(@PathVariable("organizationId") Long organizationId) {
+    public List<FacilityDetailsDto> getFacilitiesByOrganization(@PathVariable("organizationId") Long organizationId) {
         return facilityService.getFacilitiesByOrganization(organizationId);
     }
 

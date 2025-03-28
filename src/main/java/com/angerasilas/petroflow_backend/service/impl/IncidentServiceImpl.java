@@ -1,6 +1,7 @@
 package com.angerasilas.petroflow_backend.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,5 +54,10 @@ public class IncidentServiceImpl implements IncidentService {
     @Override
     public void deleteIncident(Long id) {
         incidentRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<IncidentDto> getByOrganizationEmployees_EmployeeNo(String employeeNo) {
+        return incidentRepository.findByOrganizationEmployees_EmployeeNo(employeeNo).map(incidentMapper::toDto);
     }
 }

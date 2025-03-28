@@ -44,4 +44,10 @@ public class RequestController {
         requestService.deleteRequest(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/get/employee/{employeeNo}")
+    public ResponseEntity<RequestDto> getRequestByEmployeeNo(@PathVariable String employeeNo) {
+        RequestDto request = requestService.getByEmployee_EmployeeNo(employeeNo).orElse(null);
+        return ResponseEntity.ok(request);
+    }
 }

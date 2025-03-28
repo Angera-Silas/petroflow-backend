@@ -82,7 +82,7 @@ public class FacilityServiceImpl implements FacilityService {
         return savedFacilities.stream().map(FacilityMapper::mapTOFacilityDto).collect(Collectors.toList());
     }
 
-    public List<FacilityDto> getFacilitiesByOrganization(Long organizationId) {
+    public List<FacilityDetailsDto> getFacilitiesByOrganization(Long organizationId) {
         return facilityRepository.findFacilitiesByOrganizationId(organizationId);
     }
 

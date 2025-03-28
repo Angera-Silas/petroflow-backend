@@ -24,7 +24,7 @@ public interface FacilityService{
     //add facilities
     List<FacilityDto> addFacilities(List<FacilityDto> facilityDTOs);
 
-    List<FacilityDto> getFacilitiesByOrganization(Long organizationId);
+    List<FacilityDetailsDto> getFacilitiesByOrganization(Long organizationId);
 
     List<FacilityDetailsDto> getAllFacilitiesDetails();
     

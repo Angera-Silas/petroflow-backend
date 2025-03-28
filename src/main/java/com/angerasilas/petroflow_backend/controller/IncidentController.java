@@ -44,4 +44,10 @@ public class IncidentController {
         incidentService.deleteIncident(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/get/employee/{employeeNo}")
+    public ResponseEntity<IncidentDto> getIncidentByEmployeeNo(@PathVariable String employeeNo) {
+        IncidentDto incident = incidentService.getByOrganizationEmployees_EmployeeNo(employeeNo).orElse(null);
+        return ResponseEntity.ok(incident);
+    }
 }

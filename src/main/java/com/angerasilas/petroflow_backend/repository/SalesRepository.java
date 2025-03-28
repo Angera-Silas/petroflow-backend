@@ -26,7 +26,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN Product p ON s.product.id = p.id
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
-        JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
+        JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getSalesInfo();
 
@@ -43,7 +44,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.product.organization.id = :orgId 
+        WHERE s.product.organization.id = :orgId AND s.status = 'Approved' 
+        ORDER BY s.dateTime DESC 
     """)
     List<SalesInfo> getOrganizationSalesInfo(@Param("orgId") Long orgId);
 
@@ -62,7 +64,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
         WHERE s.product.organization.id = :orgId 
-        AND s.sellPoint.facility.id = :facilityId
+        AND s.sellPoint.facility.id = :facilityId 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getOrganizationFacilitySalesInfo(@Param("orgId") Long orgId ,@Param("facilityId") Long facilityId);
 
@@ -81,7 +84,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.sellPoint.facility.id = :facilityId
+        WHERE s.sellPoint.facility.id = :facilityId 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getFacilitySalesInfo(@Param("facilityId") Long facilityId);
 
@@ -100,7 +104,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
         WHERE s.product.organization.id = :orgId  
         AND s.sellPoint.facility.id = :facilityId  
-        AND s.employee.employeeNo = :employeeNo
+        AND s.employee.employeeNo = :employeeNo 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getPersonalSalesInfoByOrganization(@Param("orgId") Long orgId ,
     @Param("facilityId") Long facilityId, @Param("employeeNo") String employeeNo);
@@ -119,7 +124,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.employee.employeeNo = :employeeNo
+        WHERE s.employee.employeeNo = :employeeNo 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getPersonalSalesInfo(@Param("employeeNo") String employeeNo);
 
@@ -136,7 +142,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.sellPoint.id = :sellPointId
+        WHERE s.sellPoint.id = :sellPointId 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getSellingPointSalesInfo(@Param("sellPointId") Long sellPointId);
 
@@ -153,7 +160,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.product.id = :productId
+        WHERE s.product.id = :productId 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getProductSalesInfo(@Param("productId") Long productId);
 
@@ -170,7 +178,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.shift.id = :shiftId
+        WHERE s.shift.id = :shiftId 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getShiftSalesInfo(@Param("shiftId") Long shiftId);
 
@@ -187,7 +196,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE s.dateTime BETWEEN :startDate AND :endDate
+        WHERE s.dateTime BETWEEN :startDate AND :endDate 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getSalesByDate(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
@@ -204,7 +214,8 @@ public interface SalesRepository extends JpaRepository<Sales, Long> {
         JOIN SellPoint sp ON s.sellPoint.id = sp.id
         JOIN Shift sh ON s.shift.id = sh.id
         JOIN OrganizationEmployees oe ON s.employee.employeeNo = oe.employeeNo
-        WHERE FUNCTION('YEAR', s.dateTime) = :year
+        WHERE FUNCTION('YEAR', s.dateTime) = :year 
+        ORDER BY s.dateTime DESC
     """)
     List<SalesInfo> getYearlySalesInfo(@Param("year") int year);
 }

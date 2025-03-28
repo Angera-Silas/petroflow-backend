@@ -1,6 +1,7 @@
 package com.angerasilas.petroflow_backend.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +52,10 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public void deleteRequest(Long id) {
         requestRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<RequestDto> getByEmployee_EmployeeNo(String employeeNo) {
+        return requestRepository.findByEmployee_EmployeeNo(employeeNo).map(requestMapper::toDto);
     }
 }
