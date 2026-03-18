@@ -1,31 +1,91 @@
 package com.angerasilas.petroflow_backend.config;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.context.event.EventListener;
+
 import com.angerasilas.petroflow_backend.entity.PermissionEntity;
 import com.angerasilas.petroflow_backend.entity.Role;
 import com.angerasilas.petroflow_backend.entity.RoleEntity;
 import com.angerasilas.petroflow_backend.repository.PermissionRepository;
 import com.angerasilas.petroflow_backend.repository.RoleRepository;
-import jakarta.annotation.PostConstruct;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @Component
+@ConditionalOnProperty(name = "app.data.init.enabled", havingValue = "true")
 public class DataInitializer {
+
+        private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
+
+        @PersistenceContext
+        private EntityManager entityManager;
+
         private final RoleRepository roleRepository;
         private final PermissionRepository permissionRepository;
 
-        @PostConstruct
-        @Transactional
-        public void initData() {
+        @EventListener(ApplicationReadyEvent.class)
+        public void initialize() {
+                try {
+                        initSchemas();
+                        initData();
+                        log.info("Roles & Permissions Initialized Successfully!");
+                } catch (Exception e) {
+                        log.warn("Skipping startup data initialization: {}", e.getMessage());
+                }
+        }
+
+        private void initSchemas() {
+                                List<String> schemas = List.of("incidents", "communication", "dashboard", "organizations");
+                for (String schema : schemas) {
+                        entityManager.createNativeQuery("CREATE SCHEMA IF NOT EXISTS " + schema).executeUpdate();
+                }
+
+                                // Create roles & permissions tables in public schema if not exists
+                entityManager.createNativeQuery("""
+                                                                CREATE TABLE IF NOT EXISTS roles (
+                                    id SERIAL PRIMARY KEY,
+                                    name VARCHAR(255) UNIQUE NOT NULL
+                                );
+                                """).executeUpdate();
+
+                entityManager.createNativeQuery("""
+                                                                CREATE TABLE IF NOT EXISTS permissions (
+                                    id SERIAL PRIMARY KEY,
+                                    name VARCHAR(255) UNIQUE NOT NULL
+                                );
+                                """).executeUpdate();
+
+                entityManager.createNativeQuery("""
+                                                                CREATE TABLE IF NOT EXISTS role_permissions (
+                                    role_id BIGINT NOT NULL,
+                                    permission_id BIGINT NOT NULL,
+                                    PRIMARY KEY (role_id, permission_id),
+                                                                        FOREIGN KEY (role_id) REFERENCES roles(id),
+                                                                        FOREIGN KEY (permission_id) REFERENCES permissions(id)
+                                );
+                                """).executeUpdate();
+        }
+
+        private void initData() {
                 // Define all permissions
                 List<String> permissionNames = Arrays.asList(
                                 "SYSTEM_MANAGE", "SYSTEM_VIEW_LOGS", "SYSTEM_MANAGE_USERS", "SYSTEM_MANAGE_PERMISSIONS",
@@ -57,7 +117,7 @@ public class DataInitializer {
                 for (String permissionName : permissionNames) {
                         PermissionEntity permission = permissionRepository.findByName(permissionName)
                                         .orElseGet(() -> permissionRepository
-                                                        .save(new PermissionEntity(null, permissionName, null,null)));
+                                                        .save(new PermissionEntity(null, permissionName, null, null)));
                         permissionMap.put(permissionName, permission);
                 }
                 // Define roles and assign default permissions
@@ -163,7 +223,5 @@ public class DataInitializer {
                                         .orElseGet(() -> roleRepository
                                                         .save(new RoleEntity(roleName, rolePermissionEntities)));
                 }
-
-                System.out.println("Roles & Permissions Initialized Successfully!");
         }
 }

@@ -19,7 +19,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "organizations")
+@Table(name = "organizations", schema = "public")
 public class Organization {
 
     @Id

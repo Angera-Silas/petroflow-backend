@@ -39,6 +39,8 @@ public class UserMapper {
         return user;
     }
 
+    
+
     public static User mapToUser(UserDto userDto, RoleEntity role) {
         User user = new User();
         user.setId(userDto.getId());
@@ -49,4 +51,17 @@ public class UserMapper {
         user.setActive(userDto.isActive());
         return user;
     }
+
+    public static User toUser(UserDto userDto, RoleEntity role, Set<PermissionEntity> permissions){
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setUsername(userDto.getUsername());
+        user.setRole(role.getName());
+        user.setRoleEntity(role);
+        user.setActive(userDto.isActive());
+        user.setPermissions(permissions);
+        return user;
+    }
+
+    
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import com.angerasilas.petroflow_backend.dto.SalesDto;
 import com.angerasilas.petroflow_backend.dto.SalesInfo;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public interface SalesService {
     SalesDto createSales(SalesDto salesDto);
@@ -22,4 +23,32 @@ public interface SalesService {
     List<SalesInfo> getShiftSalesInfo(Long shiftId);
     List<SalesInfo> getSalesByDate(LocalDateTime startDate, LocalDateTime endDate);
     List<SalesInfo> getYearlySalesInfo(int year);
+
+    /**
+     * Create sales from sync request
+     * @param data JSON data from sync
+     * @param userId User performing the sync
+     * @param deviceId Device performing the sync
+     * @return true if successfully created
+     */
+    boolean createFromSync(JsonNode data, String userId, String deviceId);
+
+    /**
+     * Update sales from sync request
+     * @param id Sales ID to update
+     * @param data JSON data from sync
+     * @param userId User performing the sync
+     * @param deviceId Device performing the sync
+     * @return true if successfully updated
+     */
+    boolean updateFromSync(Long id, JsonNode data, String userId, String deviceId);
+
+    /**
+     * Delete sales from sync request
+     * @param id Sales ID to delete
+     * @param userId User performing the sync
+     * @param deviceId Device performing the sync
+     * @return true if successfully deleted
+     */
+    boolean deleteFromSync(Long id, String userId, String deviceId);
 }

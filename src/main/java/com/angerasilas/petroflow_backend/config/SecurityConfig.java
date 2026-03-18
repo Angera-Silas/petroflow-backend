@@ -1,16 +1,22 @@
 package com.angerasilas.petroflow_backend.config;
 
+import com.angerasilas.petroflow_backend.security.tenant.TenantFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private TenantFilter tenantFilter;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -25,11 +31,13 @@ public class SecurityConfig implements WebMvcConfigurer {
     @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable()) // Disable CSRF if not needed for testing purposes
-                .authorizeHttpRequests().anyRequest().permitAll(); // Allow all requests without authentication for testing
-                return http.build();
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/health/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .anyRequest().permitAll())
+                .addFilterBefore(tenantFilter, SecurityContextPersistenceFilter.class);
+
+        return http.build();
     }
-
-    
-
 }

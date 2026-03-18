@@ -47,14 +47,14 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public List<RoleDTO> getAllRoles() {
         List<RoleEntity> roles = roleRepository.findAll();
-        return roles.stream().map(RoleMapper::toDTO).collect(Collectors.toList());
+        return roles.stream().map(RoleMapper::mapToDTO).collect(Collectors.toList());
     }
 
     @Override
     public RoleDTO getRoleById(Long id) {
         RoleEntity role = roleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + id));
-        return RoleMapper.toDTO(role);
+        return RoleMapper.mapToDTO(role);
     }
 
     @Override
@@ -68,13 +68,14 @@ public class RoleServiceImpl implements RoleService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
-
+                
+        //role.setId(roleDTO.getId());
         role.setName(roleDTO.getName());
         role.setPermissions(permissions);
 
         RoleEntity updatedRole = roleRepository.save(role);
 
-        return RoleMapper.toDTO(updatedRole);
+        return RoleMapper.mapToDTO(updatedRole);
     }
 
     @Override

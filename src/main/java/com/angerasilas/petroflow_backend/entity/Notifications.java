@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "notifications")
+@Table(name = "notifications", schema="communication")
 public class Notifications {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

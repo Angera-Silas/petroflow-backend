@@ -74,14 +74,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
 
-        user.setPassword(encoder.encode(userDto.getPassword()));
-        user.setUsername(userDto.getUsername());
-
-        RoleEntity role = roleRepository.findByName(userDto.getRole())
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name " + userDto.getRole()));
-
-        user.setRole(role.getName());
-        user.setRoleEntity(role);
 
         Set<PermissionEntity> permissions = userDto.getPermissions().stream()
                 .map(permissionRepository::findByName)
@@ -95,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
         return UserMapper.mapToUserDto(updatedUser);
     }
+
 
     @Override
     public void deleteUser(Long userId) {

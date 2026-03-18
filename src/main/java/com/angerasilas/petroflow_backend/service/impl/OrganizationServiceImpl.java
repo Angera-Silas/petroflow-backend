@@ -12,14 +12,18 @@ import com.angerasilas.petroflow_backend.exception.ResourceNotFoundException;
 import com.angerasilas.petroflow_backend.mapper.OrganizationMapper;
 import com.angerasilas.petroflow_backend.repository.OrganizationRepository;
 import com.angerasilas.petroflow_backend.service.OrganizationService;
+import com.angerasilas.petroflow_backend.service.SchemaService;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class OrganizationServiceImpl  implements OrganizationService{
 
     private OrganizationRepository organizationRepository;
+    private SchemaService schemaService;
 
     @Override
     public OrganizationDto createOrganization(OrganizationDto organizationDto){
@@ -28,6 +32,10 @@ public class OrganizationServiceImpl  implements OrganizationService{
         Organization organization = OrganizationMapper.mapToOrganization(organizationDto);
 
         Organization savedOrganization = organizationRepository.save(organization);
+
+        schemaService.createOrganizationSchema(savedOrganization.getName(), savedOrganization.getOrgType());
+
+
         
         return OrganizationMapper.mapToOrganizationDto(savedOrganization);
     }

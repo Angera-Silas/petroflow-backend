@@ -16,4 +16,15 @@ public class UserDto {
     private String role; // Role will be sent from frontend as a string
     private boolean isActive;
     private Set<String> permissions;
+
+    //create a constructor to update permissions
+    public UserDto(Long id, String username, String role, boolean isActive, Set<String> permissions) {
+        this.id = id;
+        this.username = username;
+        this.role = role;
+        this.isActive = isActive;
+        this.permissions = permissions;
+
+    }
+
 }
