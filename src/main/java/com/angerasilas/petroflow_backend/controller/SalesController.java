@@ -20,6 +20,7 @@ import com.angerasilas.petroflow_backend.dto.SalesInfo;
 import com.angerasilas.petroflow_backend.service.SalesService;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,25 +30,28 @@ public class SalesController {
     private final SalesService salesService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('create:sales')")
     public ResponseEntity<SalesDto> addSales(@RequestBody SalesDto salesDto) {
         SalesDto createdSales = salesService.createSales(salesDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSales);
     }
 
     @GetMapping("/get/{id}")
+    @PreAuthorize("hasAuthority('view:sales')")
     public ResponseEntity<SalesDto> getSalesById(@PathVariable Long id) {
         SalesDto sales = salesService.getSalesById(id);
         return ResponseEntity.ok(sales);
     }
 
     @GetMapping("/get/all")
+    @PreAuthorize("hasAuthority('view:sales')")
     public ResponseEntity<List<SalesDto>> getAllSales() {
         List<SalesDto> sales = salesService.getAllSales();
         return ResponseEntity.ok(sales);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<SalesDto> updateSales(@PathVariable Long id, @RequestBody SalesDto salesDto) {
+    @PreAuthorize("hasAuthority('update:sales')")
         SalesDto updatedSales = salesService.updateSales(id, salesDto);
         return ResponseEntity.ok(updatedSales);
     }
