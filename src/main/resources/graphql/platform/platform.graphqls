@@ -1,0 +1,10 @@
+type Query {
+  platformInfo: PlatformInfo!
+}
+
+type PlatformInfo {
+  applicationName: String!
+  tenantId: String
+  requestId: String
+  timestamp: String!
+}

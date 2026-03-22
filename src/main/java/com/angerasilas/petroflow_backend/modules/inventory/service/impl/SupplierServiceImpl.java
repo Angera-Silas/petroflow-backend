@@ -1,0 +1,4 @@
+package com.angerasilas.petroflow_backend.modules.inventory.service.impl;
+
+public class SupplierServiceImpl {
+}

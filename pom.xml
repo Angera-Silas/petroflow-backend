@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.3</version>
+        <version>4.1.0-M3</version>
         <relativePath/>
     </parent>
     <groupId>com.angerasilas</groupId>
@@ -46,6 +46,7 @@
         <restassured.version>5.5.1</restassured.version>
         <mockito.inline.version>5.2.0</mockito.inline.version>
         <jackson.version>2.18.3</jackson.version>
+        <djl.version>0.36.0</djl.version>
     </properties>
 
     <dependencies>
@@ -67,12 +68,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-graphql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.graphql-java</groupId>
+            <artifactId>graphql-java-extended-scalars</artifactId>
+            <version>22.0</version>
+        </dependency>
 
         <!-- Database Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
         <!-- Jackson compatibility for existing com.fasterxml.* code -->
@@ -184,12 +202,12 @@
         <dependency>
             <groupId>ai.djl</groupId>
             <artifactId>api</artifactId>
-            <version>0.24.0</version>
+            <version>${djl.version}</version>
         </dependency>
         <dependency>
         <groupId>ai.djl.huggingface</groupId>
         <artifactId>tokenizers</artifactId>
-        <version>0.24.0</version>
+        <version>${djl.version}</version>
         </dependency>
 
 
