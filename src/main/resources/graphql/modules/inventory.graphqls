@@ -1,0 +1,16 @@
+scalar Long
+
+extend type Query {
+  inventoryOverview: StockSummary!
+}
+
+type StockSummary {
+  tenantId: String
+  trackedSkuCount: Long!
+  lowStockItemCount: Long!
+  outOfStockItemCount: Long!
+  pendingAdjustmentCount: Long!
+  stockMovementCount: Long!
+  generatedAt: String!
+  dataReady: Boolean!
+}

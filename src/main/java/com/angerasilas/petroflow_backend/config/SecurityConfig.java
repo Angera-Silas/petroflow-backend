@@ -1,45 +1,60 @@
 package com.angerasilas.petroflow_backend.config;
 
-import com.angerasilas.petroflow_backend.security.tenant.TenantFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import com.angerasilas.petroflow_backend.tenancy.web.TenantContextFilter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 
+/**
+ * Security configuration for PetroFlow backend.
+ *
+ * Responsibilities:
+ * 1. CORS configuration for frontend integrations
+ * 2. HTTP security: CSRF disabled (JWT-based), auth enforcement
+ * 3. Tenant context filter: Extracts tenant from request before authentication
+ * 4. Method-level security: @PreAuthorize, @PostAuthorize annotations
+ *
+ * Filter Chain:
+ * TenantContextFilter (extract tenant) → Spring Security (authenticate) → Authorization (RBAC)
+ */
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class SecurityConfig implements WebMvcConfigurer {
+@RequiredArgsConstructor
+public class SecurityConfig {
 
-    @Autowired
-    private TenantFilter tenantFilter;
+    private final TenantContextFilter tenantContextFilter;
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("http://localhost:5173", "http://localhost:8081", "http://192.168.2.100:8081",
-                "https://snzkpkvg-8081.uks1.devtunnels.ms", "http://localhost:4173") // React and Flutter dev servers
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("*")
-                .allowCredentials(true);
-    }
-
-    @SuppressWarnings("removal")
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/health/**").permitAll()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .anyRequest().authenticated())  // CRITICAL FIX: Enforce authentication for all routes
-                .addFilterBefore(tenantFilter, SecurityContextPersistenceFilter.class);
+        http
+            // CSRF: Disabled (using JWT instead)
+            .csrf(csrf -> csrf.disable())
+            .cors(Customizer.withDefaults())
 
+            // Authorization rules
+            .authorizeHttpRequests(auth -> auth
+                    // Public endpoints (no auth required)
+                    .requestMatchers("/api/health/**").permitAll()
+                    .requestMatchers("/api/auth/**").permitAll()
+
+                    // Protected endpoints (authentication + tenant context required)
+                    .anyRequest().authenticated()
+            )
+
+            // Tenant context extraction (before Spring Security authentication)
+            // This ensures tenant is available in the security context
+            .addFilterBefore(tenantContextFilter, SecurityContextHolderFilter.class);
+
+        log.debug("Security filter chain configured");
         return http.build();
     }
 }

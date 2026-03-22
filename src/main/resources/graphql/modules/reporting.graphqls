@@ -1,0 +1,41 @@
+scalar Long
+
+extend type Query {
+  reportingOverview: ReportingOverview!
+}
+
+type ReportingOverview {
+  tenantId: String
+  sales: SalesReport!
+  inventory: InventoryReport!
+  branchPerformance: BranchPerformance!
+  generatedAt: String!
+  dataReady: Boolean!
+}
+
+type SalesReport {
+  periodLabel: String!
+  transactionCount: Long!
+  grossSalesAmount: Float!
+  refundAmount: Float!
+  generatedAt: String!
+  dataReady: Boolean!
+}
+
+type InventoryReport {
+  periodLabel: String!
+  trackedSkuCount: Long!
+  lowStockItemCount: Long!
+  stockMovementCount: Long!
+  generatedAt: String!
+  dataReady: Boolean!
+}
+
+type BranchPerformance {
+  periodLabel: String!
+  activeBranchCount: Long!
+  topPerformerLabel: String!
+  averageDailySalesAmount: Float!
+  generatedAt: String!
+  dataReady: Boolean!
+}

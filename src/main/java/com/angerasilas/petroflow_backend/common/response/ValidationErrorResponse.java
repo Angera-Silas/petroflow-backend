@@ -1,0 +1,4 @@
+package com.angerasilas.petroflow_backend.common.response;
+
+public @interface ValidationErrorResponse {
+}

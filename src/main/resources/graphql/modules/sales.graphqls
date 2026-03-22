@@ -1,0 +1,27 @@
+scalar Long
+
+extend type Query {
+  salesOverview: SalesSummary!
+}
+
+type SalesSummary {
+  tenantId: String
+  currencyCode: String!
+  totalSalesCount: Long!
+  grossSalesAmount: Float!
+  netSalesAmount: Float!
+  pendingRefundCount: Long!
+  latestBusinessDate: String!
+  latestDailySummary: DailySalesSummary!
+  generatedAt: String!
+  dataReady: Boolean!
+}
+
+type DailySalesSummary {
+  businessDate: String!
+  transactionCount: Long!
+  grossSalesAmount: Float!
+  netSalesAmount: Float!
+  lastUpdatedAt: String!
+  dataReady: Boolean!
+}
